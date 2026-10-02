@@ -80,6 +80,55 @@ img[src*='/features/'],
   margin-bottom: 0;
 }
 
+/* ── 点击「不可展开」的框：弹跳 3 次，强度由强到弱 ─────── */
+
+/*
+ * 页面上有两类框长得像可折叠区块、实际点不开：
+ *   · .mc-head  普通标题条（更新动态页的「更新记录」），外观与可折叠标题几乎一致
+ *   · .mc-note  提示框
+ * 只加悬停效果不够——用户会反复点击期待展开。这里给几次「弹一下」的反馈，
+ * 明确传达「此处没有隐藏内容」。
+ *
+ * 反馈是**瞬时**的（不是持续状态），因此无法只靠 :hover / :active 实现，
+ * 由 Layout.vue 在点击时加 .mc-nudge 类，动画结束即移除。
+ *
+ * 曲线设计：连续 3 个波峰，振幅依次衰减（1.024 → 1.016 → 1.008），
+ * 每次回弹略低于 1，形成逐渐收敛的余振 —— 像敲一下之后自己停下来的感觉。
+ */
+@keyframes mc-nudge {
+  0% {
+    transform: scale(1);
+  }
+  /* 第 1 次：最强 */
+  12% {
+    transform: scale(1.024);
+  }
+  26% {
+    transform: scale(0.993);
+  }
+  /* 第 2 次：中等 */
+  40% {
+    transform: scale(1.016);
+  }
+  54% {
+    transform: scale(0.996);
+  }
+  /* 第 3 次：最弱，随后收敛 */
+  68% {
+    transform: scale(1.008);
+  }
+  82% {
+    transform: scale(0.999);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.vp-doc .mc-nudge {
+  animation: mc-nudge var(--mc-anim-dur-nudge) ease-in-out both;
+}
+
 /* 折叠块：VitePress 原生支持默认收起（Notion 做不到） */
 details {
   margin: 12px 0;
@@ -109,6 +158,27 @@ details > summary::-webkit-details-marker {
   display: none;
 }
 
+/* ── 动画参数（想调手感改这里即可）──────────────────── */
+
+/*
+ * --mc-anim-dur       ：内容展开 / 收起
+ * --mc-anim-dur-hover ：悬停等即时反馈（比内容动画更短，手感才跟得上）
+ * --mc-anim-dur-nudge ：点击「不可展开的框」时的弹跳反馈（内含 3 次余振，故比其它动画长）
+ * --mc-anim-ease      ：主缓动 —— 「由慢到快 + 末端回弹」
+ *   起点慢：第 1 控制点 (0.65, 0) 让曲线前段几乎贴着 0 走，
+ *          因此即使时长不长，旋转过程依然看得清
+ *   末端弹：第 2 控制点 y = 1.45 > 1，冲过目标后再回落
+ * --mc-anim-ease-soft ：柔和版（无过冲），用于高度过渡——
+ *   高度带过冲会在 overflow:hidden 下先把内容拉长再收回，容易出现跳感
+ */
+:root {
+  --mc-anim-dur: 0.4s;
+  --mc-anim-dur-hover: 0.28s;
+  --mc-anim-dur-nudge: 0.7s;
+  --mc-anim-ease: cubic-bezier(0.65, 0, 0.25, 1.45);
+  --mc-anim-ease-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
 details > summary::before {
   content: '';
   width: 0;
@@ -118,9 +188,9 @@ details > summary::before {
   border-left: 6px solid var(--vp-c-text-3);
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  /* 稍长的时长 + 轻微回弹的缓动，让旋转与位移都看得清 */
+  /* 旋转：由慢到快，末端轻微过冲，看得清「转下去」的过程 */
   transition:
-    transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    transform var(--mc-anim-dur-hover) var(--mc-anim-ease),
     border-left-color 0.2s ease;
 }
 
@@ -130,19 +200,144 @@ details[open] > summary::before {
 }
 
 /*
- * 收起态悬停：一边旋转到指向下，一边向下"落" 3px —— 让移动过程可见。
+ * 收起态悬停：一边旋转到指向下，一边向下"落" 5px —— 让移动过程可见。
  * 注意：展开态不加位移，确保静止时三角形始终与文字垂直居中；
  *     旋转 90° 后本地 +X 轴指向屏幕下方，故 translateX 呈现为向下位移。
  */
 details:not([open]) > summary:hover::before {
-  transform: rotate(90deg) translateX(3px);
+  transform: rotate(90deg) translateX(5px);
   border-left-color: var(--vp-c-brand-1);
 }
 
-/* 尊重系统的「减少动态效果」偏好 */
-@media (prefers-reduced-motion: reduce) {
-  details > summary::before {
-    transition: none;
+/*
+ * 刚收起时抑制上面的「悬停预览」旋转，让三角形立即转回指向右。
+ *
+ * 起因：点击收起后鼠标通常仍停在标题条上，于是上面的 :hover 规则继续生效，
+ * 出现「内容已经收起、箭头却依然指向下」的矛盾——看起来就像三角形没转回去。
+ * 纯 CSS 无法区分「鼠标移入」与「刚点击收起」（两者都只是 :hover），
+ * 故由 Layout.vue 在 toggle 收起时加上此类，鼠标离开标题条后移除。
+ *
+ * 限定在 :not([open]) 内，避免展开时被误伤；
+ * 特异性也高于上面的悬停规则，因此无需依赖声明顺序。
+ */
+details:not([open]) > summary.mc-no-hover-turn:hover::before {
+  transform: none;
+}
+
+/* ── 内容展开 / 收起动画 ─────────────────────────────── */
+
+/*
+ * 两个原生限制，各自的解法：
+ *
+ * ① <details> 的高度是 auto，CSS 无法直接过渡
+ *    → 用 ::details-content + interpolate-size 让 height: auto 可参与过渡
+ *
+ * ② 关闭时内容会「瞬间隐藏」，收起动画根本来不及播
+ *    原因：content-visibility 在关闭时被离散地切到 hidden。
+ *    → 必须把它也纳入过渡并加 allow-discrete，让内容在高度收缩完成前保持可见。
+ *    **这是「收起没有动画」的根因**，漏掉它就会出现「展开有动画、收起直接跳回」。
+ *
+ * 内层内容改用 transition（而非 animation）才能双向生效——
+ * animation 只在 [open] 时应用，收起瞬间就被移除，播不出退场动画。
+ * transition 的取值来自「目标状态」，因此可以给展开与收起分别设定缓动：
+ *   · 展开方向取 details[open] 上的值 → 带过冲，更"弹"
+ *   · 收起方向取基础规则上的值       → 柔和收拢，不回弹
+ */
+
+@supports selector(::details-content) {
+  .vp-doc details::details-content {
+    height: 0;
+    overflow: hidden;
+    /* 兼容性兜底：支持 clip 的浏览器用 clip（不会产生滚动容器） */
+    overflow: clip;
+    transition:
+      height var(--mc-anim-dur) var(--mc-anim-ease-soft),
+      content-visibility var(--mc-anim-dur) allow-discrete;
+  }
+
+  .vp-doc details[open]::details-content {
+    height: auto;
+  }
+
+  /* 让 height: auto 也能参与过渡（此前 CSS 做不到） */
+  @supports (interpolate-size: allow-keywords) {
+    .vp-doc details {
+      interpolate-size: allow-keywords;
+    }
+  }
+
+  /* 内层内容：默认（收起方向） */
+  .vp-doc details > *:not(summary) {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--mc-anim-dur) ease,
+      transform var(--mc-anim-dur) var(--mc-anim-ease-soft);
+  }
+
+  /* 收起后的目标态 */
+  .vp-doc details:not([open]) > *:not(summary) {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.96);
+  }
+
+  /* 展开方向：缓动含过冲，scale 会先冲到约 1.04 再收回 —— 这就是"弹"的来源 */
+  .vp-doc details[open] > *:not(summary) {
+    transition:
+      opacity var(--mc-anim-dur) ease,
+      transform var(--mc-anim-dur) var(--mc-anim-ease);
+  }
+}
+
+/*
+ * 不支持 ::details-content 的浏览器：退化为「仅展开有动画」。
+ * 这是元素原生能力所限——内容一关闭就被浏览器隐藏，没有可用的过渡窗口。
+ */
+@supports not selector(::details-content) {
+  @keyframes mc-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-14px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .vp-doc details[open] > *:not(summary) {
+    animation: mc-reveal var(--mc-anim-dur) var(--mc-anim-ease) both;
+  }
+}
+
+/* ── 分页过渡：切换页面时整体淡出 → 淡入 ──────────────── */
+
+/*
+ * 由 theme/Layout.vue 在路由变化时加上 .is-active。
+ * 遮罩用页面背景色铺满视口，随后淡出、露出新页面，
+ * 观感上就是一次整体的「淡出 → 淡入」。
+ *
+ * ⚠ 时长需与 Layout.vue 中 setTimeout 的 500ms 保持同步。
+ */
+.mc-page-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--vp-c-bg);
+}
+
+.mc-page-veil.is-active {
+  animation: mc-page-veil 0.45s var(--mc-anim-ease-soft) both;
+}
+
+@keyframes mc-page-veil {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -405,6 +600,29 @@ details > *:not(summary):last-child {
   margin-bottom: 0;
 }
 
+/* ── 标题条悬停反馈：内容右移并微放大 ─────────────────── */
+
+/*
+ * 标题文字在 summary 里是**裸文本节点**，CSS 无法对它应用 transform，
+ * 因此页面里的 summary 内容统一包了一层 <span class="mc-t">
+ * （含图标；FAQ 问答与版本块是纯文字，同样包裹以便统一效果）。
+ *
+ * 悬停时整体向右轻移并微放大，配合三角形的旋转，共同提示「这里可点击」。
+ * transform-origin 设为左侧：放大向右延展，不会向左顶破标题条内边距。
+ */
+.vp-doc details > summary > .mc-t {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  transform-origin: left center;
+  transition: transform var(--mc-anim-dur-hover) var(--mc-anim-ease);
+}
+
+.vp-doc details > summary:hover > .mc-t {
+  transform: translateX(4px) scale(1.045);
+}
+
 /* ── 版本记录块（更新动态页）────────────────────────── */
 
 /*
@@ -431,4 +649,49 @@ details > *:not(summary):last-child {
 
 .vp-doc details.version[open] > summary {
   color: var(--vp-c-brand-1);
+}
+
+/* ── 「减少动态效果」降级 ─────────────────────────────── */
+
+/*
+ * ⚠ 这一段必须放在文件**最末尾**。
+ * 这些规则与前面的动画规则**特异性相同**，只能靠声明顺序胜出；
+ * 若写在前面就会被后面的动画规则覆盖（曾因此导致降级失效）。
+ *
+ * 另注：VitePress 自带一条全局规则，会在该模式下用 !important
+ * 把 animation-duration / transition-duration 压到 1ms，
+ * 但它**不管 transform**，所以位移与缩放必须在此显式取消。
+ */
+@media (prefers-reduced-motion: reduce) {
+  details > summary::before,
+  details::details-content,
+  .vp-doc details > summary > .mc-t,
+  .vp-doc details > *:not(summary) {
+    transition: none;
+  }
+
+  .vp-doc details[open] > *:not(summary) {
+    animation: none;
+  }
+
+  /* 位移与缩放会让前庭敏感的用户不适，直接取消（保留悬停高亮与变色） */
+  .vp-doc details > summary:hover > .mc-t {
+    transform: none;
+  }
+
+  /* 点击弹跳同理取消 */
+  .vp-doc .mc-nudge {
+    animation: none;
+  }
+
+  /* 收起态原本就不可见，无需取消其位移；但确保不影响展开后的最终态 */
+  .vp-doc details:not([open]) > *:not(summary) {
+    opacity: 0;
+    transform: none;
+  }
+
+  /* 关掉动画后遮罩回落到基础态 opacity:0，即不做分页过渡 */
+  .mc-page-veil.is-active {
+    animation: none;
+  }
 }

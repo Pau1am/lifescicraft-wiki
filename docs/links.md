@@ -16,7 +16,7 @@ title: 相关链接
 ## 排行榜
 
 <details class="mc-section">
-<summary><img src="/icons/item__gold_ingot.png" class="mc-icon" alt="" />网页版榜单</summary>
+<summary><span class="mc-t"><img src="/icons/item__gold_ingot.png" class="mc-icon" alt="" />网页版榜单</span></summary>
 
 - **网页排行榜**：[https://mcrank.pau1am.xyz](https://mcrank.pau1am.xyz)
   - 可查看日榜 / 周榜 / 月榜 / 年榜 / 总榜，支持按日期区间查询、筛选在线玩家

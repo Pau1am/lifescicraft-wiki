@@ -16,7 +16,7 @@ title: 服务器更新动态
 <div class="mc-head"><img src="/icons/item__firework_rocket.png" class="mc-icon" alt="" />更新记录</div>
 
 <details class="version">
-<summary>1.0 —— 2026 年 9 月 20 日</summary>
+<summary><span class="mc-t">1.0 —— 2026 年 9 月 20 日</span></summary>
 
 - **服务器正式开启**
 - 本服的服务器架构（Velocity 群组 + 生存 / 创造 / 镜像三个子服务器）与大部分特殊功能，都是在这一天上线的
