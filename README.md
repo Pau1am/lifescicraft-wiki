@@ -110,8 +110,18 @@ npm run sync:assets    # 仅同步图片素材
 需要一次性配置：仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**。
 （若误选「分支 / root」，GitHub 会尝试用 Jekyll 处理整个仓库。）
 
-- 使用自定义域名时，`config.mts` 中 `base` 保持 `'/'`；
-  若走 `<用户名>.github.io/<仓库名>/`，必须改为 `base: '/<仓库名>/'`，否则 CSS 与图片会全部 404。
+### ⚠ base 路径：决定资源能否加载
+
+`docs/.vitepress/config.mts` 里的 `base` 必须与访问方式匹配，**配错会导致页面能打开但 CSS 与图片全部 404**：
+
+| 访问方式 | `base` 应设为 |
+|---|---|
+| 默认 Pages 地址 `https://pau1am.github.io/lifescicraft-wiki/` | `'/lifescicraft-wiki/'` ← **当前设置** |
+| 绑定了自定义域名（如 `wiki.pau1am.xyz`） | `'/'` |
+
+绑定自定义域名的步骤：仓库 Settings → Pages → Custom domain 填入域名并勾选 Enforce HTTPS，
+再到域名 DNS 添加 `CNAME` 记录指向 `pau1am.github.io`。**改完域名记得同步改 `base`。**
+
 
 ### 关于搜索引擎收录
 
@@ -143,3 +153,5 @@ npm run sync:assets    # 仅同步图片素材
 - 启用 `noindex` + `robots.txt`，避免被搜索引擎收录
 - 「相关链接」页移除「客户端下载」章节（含「备用下载通道」占位符），
   避免在公开站点上留下空的下载承诺
+- 部署路径 `base` 设为 `'/lifescicraft-wiki/'`，适配默认的 GitHub Pages 子路径地址
+- 新增 `.gitattributes` 统一 LF 换行，便于 Windows / macOS 双向协作
