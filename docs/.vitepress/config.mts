@@ -60,7 +60,19 @@ export default defineConfig({
       },
     ],
 
-    outline: { level: [2, 3], label: '本页目录' },
+    /*
+     * 本页目录只收 h2。
+     *
+     * ⚠ 不要改成 [2, 3]。本站的 h3 全部写在 <details class="mc-section"> 里
+     * （章节标题条本身是 h2，条内的「这是什么 / 怎么用」等是 h3），
+     * 而 VitePress 的目录**不过滤元素是否可见** —— h3 会被照收录进目录，
+     * 但它们藏在默认收起的折叠块里：
+     *   · 目录里出现一堆点不开、也滚不到的条目
+     *   · 高亮计算（useActiveAnchor）用同一份标题列表，隐藏元素的
+     *     offsetTop 取值异常，会让高亮/左侧指示线乱跳
+     * 只收 h2 后，目录条目全部可见、点击定位准确，高亮也稳定。
+     */
+    outline: { level: [2, 2], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },
     returnToTopLabel: '回到顶部',
     sidebarMenuLabel: '目录',
