@@ -1,0 +1,15 @@
+# 依赖与构建产物
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# 由 scripts/sync-assets.mjs 从仓库根目录生成，不纳入版本控制
+# （根目录的 icons/ covers/ features/ 才是唯一源）
+docs/public/icons/
+docs/public/covers/
+docs/public/features/
+
+# 系统与日志
+.DS_Store
+Thumbs.db
+*.log

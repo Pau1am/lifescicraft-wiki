@@ -1,0 +1,162 @@
+/* ── 全站 MC 像素风微调 ───────────────────────────── */
+
+/* MC 物品贴图：保持像素感，不模糊 */
+img[src*='/icons/'],
+img[src*='/features/'],
+.mc-icon {
+  image-rendering: pixelated;
+}
+
+/* 章节标题条：MC 贴图 + 中文标题 */
+.mc-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0 14px;
+  padding: 10px 14px;
+  border-radius: var(--vp-custom-block-tip-border-radius, 8px);
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mc-head .mc-icon {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  object-fit: contain;
+}
+
+/* 页面顶部的说明 / 提示条 */
+.mc-note {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  margin: 16px 0;
+  padding: 13px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-left: 3px solid var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.mc-note .mc-icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  margin-top: 2px;
+  object-fit: contain;
+}
+
+.mc-note > div > :first-child {
+  margin-top: 0;
+}
+
+.mc-note > div > :last-child {
+  margin-bottom: 0;
+}
+
+/* 折叠块：VitePress 原生支持默认收起（Notion 做不到） */
+details {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-alt);
+  transition: background-color 0.2s;
+}
+
+details[open] {
+  background: var(--vp-c-bg-soft);
+}
+
+details > summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--vp-c-text-1);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  user-select: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::before {
+  content: '';
+  width: 0;
+  height: 0;
+  flex: none;
+  border-left: 6px solid var(--vp-c-text-3);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transition: transform 0.18s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details > summary:hover {
+  color: var(--vp-c-brand-1);
+}
+
+details[open] > summary {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+details > *:not(summary):last-child {
+  margin-bottom: 0;
+}
+
+/* 功能截图 */
+.feature-shot {
+  margin: 18px 0;
+}
+
+.feature-shot img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+  display: block;
+}
+
+.feature-shot figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+  text-align: center;
+}
+
+/* 指令表格里的等宽字体稍加底色 */
+.vp-doc code {
+  font-variant-ligatures: none;
+}
+
+/* 首页封面图 */
+.hero-cover {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--vp-c-divider);
+  margin: 0 0 22px;
+  display: block;
+}
+
+/* 「关于本 Wiki」用的紧凑列表 */
+.meta-list {
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+}
+
+.meta-list strong {
+  color: var(--vp-c-text-1);
+}

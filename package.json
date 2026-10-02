@@ -1,0 +1,19 @@
+{
+  "name": "lifescicraft-wiki",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LifeSci-Craft 服务器 Wiki：图片素材库 + VitePress 站点",
+  "scripts": {
+    "sync:assets": "node scripts/sync-assets.mjs",
+    "docs:dev": "npm run sync:assets && vitepress dev docs",
+    "docs:build": "npm run sync:assets && vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.0"
+  },
+  "optionalDependencies": {
+    "@esbuild/win32-x64": "^0.28.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.63.6"
+  }
+}
