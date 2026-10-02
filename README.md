@@ -103,10 +103,27 @@ npm run sync:assets    # 仅同步图片素材
   </details>
   ```
   收起时标题条悬停会整条高亮，提示可点击；展开／收起高度不跳动。
-- **不需要折叠的纯标题条**可用 `mc-head`（保留备用）：
-  ```html
-  <div class="mc-head"><img src="/icons/item__bell.png" class="mc-icon" alt="" />章节名</div>
-  ```
+- **不需要折叠的纯标题条**用 `mc-head`，分两种情况：
+  - **不需要**出现在右侧「本页目录」里 → 直接写 `<div>`：
+    ```html
+    <div class="mc-head"><img src="/icons/item__bell.png" class="mc-icon" alt="" />章节名</div>
+    ```
+  - **需要**出现在目录里（更新动态页的「更新记录」就是这样）→ 必须把它写成
+    **Markdown 标题**，因为只有 `## xxx` 才会生成 id；`<div>` 和裸 `<h2>` 都**不会**
+    被 VitePress 的标题插件处理。  
+    但⚠ **不要把 `<img>` 写进标题文字**（如 `## <img … />更新记录`）——
+    那会让锚点的 `aria-label` 把整段 HTML 原样拼进去（读屏会念出一串源码）。
+    正确写法是让**图标与标题并列**，由 `.mc-head` 的 flex 排成「图标 + 标题」：
+    ```html
+    <div class="mc-head">
+    <img src="/icons/item__bell.png" class="mc-icon" alt="" />
+
+    ## 章节名
+
+    </div>
+    ```
+    `custom.css` 中的 `.mc-head > h2` 规则会把 VitePress 给 `h2` 的默认样式
+    （24px 字号、上边框、48px 间距）复位回标题条的外观。
 - **纯折叠内容**（如 FAQ 问答、版本记录）用原生 `<details>` / `<summary>`，  
   summary 里直接写标题即可，**不加 `open` 属性即为默认收起**。
 - **提示条**用 `<div class="mc-note">`，内部文字与 `<div>` 之间**必须留空行**，  
@@ -188,6 +205,32 @@ npm run sync:assets    # 仅同步图片素材
 - **分页过渡**：`theme/Layout.vue` 在路由变化时铺一层与背景同色的遮罩并淡出，  
   形成「淡出 → 淡入」的观感。VitePress 1.x 未内建 View Transitions，故自行实现。  
   ⚠ 遮罩动画时长（`custom.css` 的 `0.45s`）与 `Layout.vue` 中的 `500ms` 需保持同步
+- **平滑滚动**：点击「本页目录」或锚点时滑动到目标，而非瞬间跳转。  
+  起因：VitePress 只在点击标题旁的 `#` 锚点（`.header-anchor`）时才平滑滚动
+  （`scrollTo(link, hash, link.classList.contains('header-anchor'))`），
+  而「本页目录」的链接类名是 `.outline-link`，走的是 `window.scrollTo(0, top)` 瞬跳分支。  
+  解法是在 CSS 中给 `html.mc-smooth` 设 `scroll-behavior: smooth` ——
+  位置式 `window.scrollTo(x, y)` 的默认 `behavior` 为 `auto`，会遵循滚动容器的该值，
+  因此无需改动 VitePress 源码。  
+  ⚠ **为什么必须带 `.mc-smooth` 类、不能直接写 `html`**：换页时 VitePress 同样会
+  `window.scrollTo(0, 0)` 回到顶部，若全局生效会看到内容向上滑动。
+  `theme/index.ts` 的 `enhanceApp` 接管 `onBeforeRouteChange` / `onAfterRouteChange`
+  两个钩子（VitePress 自身未占用，可安全接管），导航前移除该类、导航后恢复；  
+  另设 1.5s 兜底计时器，防止导航被中断导致该类永久丢失。  
+  ⚠ 恢复时机：VitePress 的「回到顶部」发生在 `nextTick` 回调里，可能晚于
+  `onAfterRouteChange`，故恢复要延后一帧再加一个宏任务。  
+  ⚠ 系统开启「减少动态效果」时会自动失效（VitePress 自带的
+  `scroll-behavior: auto !important` 优先级更高）
+- ⚠ **「本页目录」只收 h2，`config.mts` 的 `outline.level` 必须保持 `[2, 2]`，不要改成 `[2, 3]`**。  
+  本站的 h3 全部写在 `<details class="mc-section">` 里（章节标题条本身是 h2，
+  条内的「这是什么 / 怎么用」等才是 h3），而 VitePress 的目录**不过滤元素是否可见**——
+  h3 会被照收录进目录，但它们藏在默认收起的折叠块里，于是：
+  1. 目录里出现一堆点不开、也滚不到的条目；
+  2. **高亮与左侧指示线会乱跳** —— 高亮计算（`useActiveAnchor`）用的是同一份标题列表，
+     而不可见元素的 `offsetTop` 取值异常（全为 0），会被误判成「已滚过的当前项」。
+
+  只收 h2 后，目录条目全部可见、点击定位准确、高亮稳定。
+  （改前特殊功能页 56 条、首页 8 条；改后分别为 12 条和 5 条）
 - 全部动画都遵循 `prefers-reduced-motion`。  
   ⚠ **注意**：VitePress 自带一条全局规则，系统开启「减少动态效果」时会用 `!important`  
   灭活所有动画与过渡——届时本文件的动画一律不生效。
@@ -241,6 +284,28 @@ npm run sync:assets    # 仅同步图片素材
 防线由**白名单 + 客户端分发**承担。因此公开托管不构成额外泄露面。
 
 ## 变更记录
+
+### 1.2 —— 2026 年 10 月 3 日
+
+导航体验完善：补上平滑滚动，并修正右侧「本页目录」的两处问题。
+
+**平滑滚动**
+- 点击右侧「本页目录」或锚点时**平滑滑动**到目标，不再瞬间跳转。
+  起因是 VitePress 只在点击标题旁的 `#` 锚点时才平滑滚动，「本页目录」的
+  `.outline-link` 走的是瞬跳分支；解法见「写作约定」
+- 换页时仍保持即时回顶（导航期间临时关闭平滑），避免看到内容向上滑动
+
+**「本页目录」修正**
+- **目录范围收窄为只收 h2**（`outline.level: [2, 2]`）。此前收 h2 + h3，
+  而本站 h3 **全部**在默认收起的折叠块内，会同时造成两个问题：
+  1. 目录里出现大量点不开、也滚不到的条目（特殊功能页曾多达 56 条，现为 12 条）
+  2. **高亮与左侧指示线乱跳** —— 高亮计算用的是同一份标题列表，
+     而折叠块内元素的 `offsetTop` 取值异常，会被误判成「已滚过的当前项」
+- **补全「帮助与动态」三页的目录**：这三页原先没有任何标题，故整块不显示。
+  现给 FAQ 加了三个分组标题，两个更新页的「更新记录」改为真标题——**9/9 页均有目录**
+- ⚠ 把标题条写成真标题时，**图标必须与标题并列**，不可写进标题文字
+  （否则锚点的 `aria-label` 会拼进整段 HTML，读屏会念出源码），
+  写法与原因见「写作约定」
 
 ### 1.1 —— 2026 年 10 月 3 日
 

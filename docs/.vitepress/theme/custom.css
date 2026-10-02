@@ -49,6 +49,44 @@ img[src*='/features/'],
   object-fit: contain;
 }
 
+/*
+ * 标题条里放**真标题**（更新动态页的「更新记录」）
+ *
+ * 写法：
+ *   <div class="mc-head">
+ *   <img src="/icons/xxx.png" class="mc-icon" alt="" />
+ *
+ *   ## 更新记录
+ *
+ *   </div>
+ *
+ * 为什么要这么绕：VitePress 的「本页目录」只认 Markdown 语法生成的标题
+ * （`## xxx` 才会有 id）；但若把 <img> 写进标题文字里，锚点的 aria-label
+ * 会把整段 HTML 原样拼进去（读屏会念出一串源码）。所以让图标与标题**并列**，
+ * 由 .mc-head 的 flex 布局排成「图标 + 标题」，标题本身保持纯文本。
+ *
+ * 下面把 VitePress 给 .vp-doc h2 的默认样式（24px 大字号、上边框、48px 大间距）
+ * 换回标题条的外观（.mc-head 自身已有 flex / 内边距 / 边框 / 背景）。
+ */
+.vp-doc .mc-head > h2 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+}
+
+/* 标题自带的 # 锚点默认绝对定位在左上角（靠负 margin 露在标题外），
+   这里改为贴在标题文字右侧并垂直居中 */
+.vp-doc .mc-head > h2 > .header-anchor {
+  top: 50%;
+  left: auto;
+  right: 0;
+  margin-left: 0.35em;
+  transform: translateY(-50%);
+}
+
 /* 页面顶部的说明 / 提示条 */
 .mc-note {
   display: flex;
@@ -308,6 +346,29 @@ details:not([open]) > summary.mc-no-hover-turn:hover::before {
   .vp-doc details[open] > *:not(summary) {
     animation: mc-reveal var(--mc-anim-dur) var(--mc-anim-ease) both;
   }
+}
+
+/* ── 平滑滚动：点击「本页目录」或锚点时滑到目标 ────────── */
+
+/*
+ * VitePress 只在点击标题旁的 # 锚点（.header-anchor）时才启用平滑滚动：
+ *   scrollTo(link, hash, link.classList.contains('header-anchor'))
+ * 「本页目录」的链接类名是 .outline-link，不含 header-anchor，
+ * 于是走 window.scrollTo(0, top) 分支 —— 瞬间跳转。
+ *
+ * 这里用 CSS 统一开启平滑滚动即可，无需改动 VitePress：
+ * 位置式调用 window.scrollTo(x, y) 的默认 behavior 为 auto，
+ * 会遵循滚动容器的 scroll-behavior，所以它也会变成平滑的。
+ *
+ * ⚠ 必须带 .mc-smooth 类，不能直接写 html：
+ *   路由切换时 VitePress 同样会调用 window.scrollTo(0, 0) 回到顶部，
+ *   若全局生效，换页时会看到旧内容向上滑动。
+ *   theme/index.ts 会在导航开始前移除该类、导航结束后恢复。
+ * ⚠ 系统开启「减少动态效果」时会自动失效 ——
+ *   VitePress 自带的全局规则已用 scroll-behavior: auto !important 覆盖。
+ */
+html.mc-smooth {
+  scroll-behavior: smooth;
 }
 
 /* ── 分页过渡：切换页面时整体淡出 → 淡入 ──────────────── */

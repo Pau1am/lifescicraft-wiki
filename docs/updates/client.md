@@ -15,7 +15,12 @@ title: 客户端更新动态
 </div>
 </div>
 
-<div class="mc-head"><img src="/icons/block__torch.png" class="mc-icon" alt="" />更新记录</div>
+<div class="mc-head">
+<img src="/icons/block__torch.png" class="mc-icon" alt="" />
+
+## 更新记录
+
+</div>
 
 <details class="version">
 <summary><span class="mc-t">1.0 —— 2026 年 9 月 20 日</span></summary>
