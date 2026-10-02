@@ -5,9 +5,9 @@ export default defineConfig({
   title: 'LifeSci-Craft',
   description: 'LifeSci-Craft 服务器 Wiki — 玩法说明、服务器规则与常见问题',
   // ⚠ 部署路径，两种情况二选一，配错会导致 CSS 与图片全部 404：
-  //   · 走默认 GitHub Pages 地址（pau1am.github.io/lifescicraft-wiki/）→ 保持 '/lifescicraft-wiki/'
-  //   · 绑定了自定义域名（如 wiki.pau1am.xyz）→ 改成 '/'
-  base: '/lifescicraft-wiki/',
+  //   · 已绑自定义域名（wiki.pau1am.xyz）→ '/'   ← 当前设置
+  //   · 走默认 GitHub Pages 地址（pau1am.github.io/lifescicraft-wiki/）→ 改成 '/lifescicraft-wiki/'
+  base: '/',
   cleanUrls: true,
   lastUpdated: true,
 

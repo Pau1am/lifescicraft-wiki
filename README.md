@@ -122,11 +122,14 @@ npm run sync:assets    # 仅同步图片素材
 
 | 访问方式 | `base` 应设为 |
 |---|---|
-| 默认 Pages 地址 `https://pau1am.github.io/lifescicraft-wiki/` | `'/lifescicraft-wiki/'` ← **当前设置** |
-| 绑定了自定义域名（如 `wiki.pau1am.xyz`） | `'/'` |
+| 绑定了自定义域名 `https://wiki.pau1am.xyz/` | `'/'` ← **当前设置** |
+| 默认 Pages 地址 `https://pau1am.github.io/lifescicraft-wiki/` | `'/lifescicraft-wiki/'` |
 
 绑定自定义域名的步骤：仓库 Settings → Pages → Custom domain 填入域名并勾选 Enforce HTTPS，
 再到域名 DNS 添加 `CNAME` 记录指向 `pau1am.github.io`。**改完域名记得同步改 `base`。**
+
+当前实际部署：自定义域名为 `wiki.pau1am.xyz`，DNS 托管在 DNSPod。
+`wiki` 记录须为 `CNAME → pau1am.github.io`（不能再是 A 记录）。
 
 
 ### 关于搜索引擎收录
@@ -171,3 +174,17 @@ npm run sync:assets    # 仅同步图片素材
   与 vitepress 依赖的 esbuild 次要版本（0.21.5）冲突，导致 `npm ci` 失败。
   已移除硬编码，改为生成记录**全平台**解析结果的 `package-lock.json`
   （23 个 esbuild / 25 个 rollup 平台变体），Windows 与 Linux 均可正常 `npm ci`
+
+### 1.0.2 —— 2026 年 10 月 2 日
+
+- **切换为自定义域名部署**：`base` 由 `'/lifescicraft-wiki/'` 改为 `'/'`，
+  配合 GitHub Pages 绑定的 `wiki.pau1am.xyz`
+- 原地址 `wiki.pau1am.xyz` 此前由自有服务器（nginx）301 跳转到 Notion 版 Wiki；
+  改为 GitHub Pages 托管后，该跳转不再生效，Notion 版仅作为存档保留
+
+### 1.0.2 —— 2026 年 10 月 2 日
+
+- **切换为自定义域名部署**：`base` 由 `'/lifescicraft-wiki/'` 改为 `'/'`，
+  配合 GitHub Pages 绑定的 `wiki.pau1am.xyz`
+- 原地址 `wiki.pau1am.xyz` 此前由自有服务器（nginx）301 跳转到 Notion 版 Wiki；
+  改为 GitHub Pages 托管后，该跳转不再生效，Notion 版仅作为存档保留
