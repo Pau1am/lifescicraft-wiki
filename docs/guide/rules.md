@@ -17,10 +17,8 @@ title: 服务器规则
 
 ## 通用规则
 
-<div class="mc-head"><img src="/icons/item__book.png" class="mc-icon" alt="" />所有子服都适用</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/item__book.png" class="mc-icon" alt="" />所有子服都适用</summary>
 
 - **禁止恶意破坏他人建筑**：未经允许不得拆改、烧毁他人建筑，也不得用 TNT、岩浆、水流等方式破坏他人成果
 - **禁止作弊**：除官方客户端自带的功能外，不得使用外挂或作弊程序（如自动战斗、透视、飞行、自动挖掘等）——官方客户端包含哪些功能见[特殊功能](/features/)
@@ -32,10 +30,8 @@ title: 服务器规则
 
 ## 生存服规则
 
-<div class="mc-head"><img src="/icons/item__wheat.png" class="mc-icon" alt="" />主要活动区</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/item__wheat.png" class="mc-icon" alt="" />主要活动区</summary>
 
 **红石装置**
 
@@ -52,10 +48,8 @@ title: 服务器规则
 
 ## 创造服规则
 
-<div class="mc-head"><img src="/icons/item__brick.png" class="mc-icon" alt="" />超平坦设计区</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/item__brick.png" class="mc-icon" alt="" />超平坦设计区</summary>
 
 - 创造服为**超平坦模式**，主要供玩家**休闲建筑或设计建筑**；设计好的作品可以保存为**投影，再在生存服中复刻**
 - **基本没有严格的建筑限制**，只需要**不干扰其他玩家的建筑、不占用他们的空间**即可
@@ -64,10 +58,8 @@ title: 服务器规则
 
 ## 镜像服规则
 
-<div class="mc-head"><img src="/icons/block__glass.png" class="mc-icon" alt="" />默认关闭的测试服</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/block__glass.png" class="mc-icon" alt="" />默认关闭的测试服</summary>
 
 - 镜像服**默认关闭**，需要在游戏内用指令手动开启，具体操作见[常用指令 › 镜像服务器使用](/commands)
 - 它的用途是**复制生存服的现有存档**，用来**测试红石机器运作**，或进行一些**不可回溯的测试**（例如爆改地形、试验危险装置）
@@ -78,10 +70,8 @@ title: 服务器规则
 
 ## 违规处理
 
-<div class="mc-head"><img src="/icons/item__chain.png" class="mc-icon" alt="" />处理分两档</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/item__chain.png" class="mc-icon" alt="" />处理分两档</summary>
 
 - **小问题 → 警告**：例如**玩笑性质的破坏他人建筑**、但对方并不接受这类行为。**若被破坏方愿意原谅**，则只给予警告，不做进一步处理
 - **严重问题 → 直接封禁并移除白名单**：如恶意破坏、作弊、偷窃等触及底线的行为，不再给予缓冲

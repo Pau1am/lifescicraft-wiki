@@ -1,5 +1,25 @@
 /* ── 全站 MC 像素风微调 ───────────────────────────── */
 
+/*
+ * 强调色：VitePress 默认主色是靛蓝（--vp-c-indigo-1），与 Minecraft 森林主题不符，
+ * 这里统一改为绿色，与 <meta name="theme-color"> 的 #2f6f4f 呼应。
+ * 覆盖 --vp-c-brand-* 会同时影响链接、侧边栏选中态、悬停态等，全站保持一致。
+ * 想换回默认蓝色：删掉下面两组变量即可。
+ */
+:root {
+  --vp-c-brand-1: #2f7d52;
+  --vp-c-brand-2: #369060;
+  --vp-c-brand-3: #3fa96d;
+  --vp-c-brand-soft: rgba(47, 125, 82, 0.14);
+}
+
+.dark {
+  --vp-c-brand-1: #5cc98a;
+  --vp-c-brand-2: #4bb877;
+  --vp-c-brand-3: #3fa96d;
+  --vp-c-brand-soft: rgba(92, 201, 138, 0.16);
+}
+
 /* MC 物品贴图：保持像素感，不模糊 */
 img[src*='/icons/'],
 img[src*='/features/'],
@@ -7,7 +27,7 @@ img[src*='/features/'],
   image-rendering: pixelated;
 }
 
-/* 章节标题条：MC 贴图 + 中文标题 */
+/* 章节标题条（不折叠时使用；可折叠请用下面的 .mc-section） */
 .mc-head {
   display: flex;
   align-items: center;
@@ -94,17 +114,40 @@ details > summary::before {
   width: 0;
   height: 0;
   flex: none;
+  /* 用 border 画三角形：默认指向右侧 */
   border-left: 6px solid var(--vp-c-text-3);
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  transition: transform 0.18s ease;
+  /* 稍长的时长 + 轻微回弹的缓动，让旋转与位移都看得清 */
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    border-left-color 0.2s ease;
 }
 
+/* 展开态：指向下方，位置保持垂直居中 */
 details[open] > summary::before {
   transform: rotate(90deg);
 }
 
-details > summary:hover {
+/*
+ * 收起态悬停：一边旋转到指向下，一边向下"落" 3px —— 让移动过程可见。
+ * 注意：展开态不加位移，确保静止时三角形始终与文字垂直居中；
+ *     旋转 90° 后本地 +X 轴指向屏幕下方，故 translateX 呈现为向下位移。
+ */
+details:not([open]) > summary:hover::before {
+  transform: rotate(90deg) translateX(3px);
+  border-left-color: var(--vp-c-brand-1);
+}
+
+/* 尊重系统的「减少动态效果」偏好 */
+@media (prefers-reduced-motion: reduce) {
+  details > summary::before {
+    transition: none;
+  }
+}
+
+/* 悬停时标题文字也变为强调色（提高优先级，避免被 VitePress 默认样式压过） */
+.vp-doc details > summary:hover {
   color: var(--vp-c-brand-1);
 }
 
@@ -159,4 +202,233 @@ details > *:not(summary):last-child {
 
 .meta-list strong {
   color: var(--vp-c-text-1);
+}
+
+/* ── 侧边栏图标（MC 贴图）────────────────────────────── */
+
+/*
+ * VitePress 的侧边栏 text 只能渲染纯文本、无法内联 HTML，
+ * 因此图标用「伪元素 + 贴图背景」实现；.text 改为 flex 容器，让图标与文字垂直居中。
+ * · 链接项：靠 href 属性选择器定位（与条目排序无关）
+ * · 分组标题：靠 :has() 内含的标志性链接定位（与分组顺序无关）
+ *
+ * ⚠ 新增侧边栏条目 / 分组时，必须在本节补一条对应的 background-image 规则，
+ *   否则该项会显示一个空白占位。
+ * ⚠ 贴图使用绝对路径；若将来修改 base，需同步改为 '/<base>/icons/...'。
+ */
+
+.VPSidebar .VPSidebarItem .text {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.VPSidebar .VPSidebarItem .text::before {
+  content: '';
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  background: center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+/* 链接项图标 */
+.VPSidebar a[href='/'] .text::before {
+  background-image: url('/icons/item__knowledge_book.png');
+}
+
+.VPSidebar a[href='/guide/newbie'] .text::before {
+  background-image: url('/icons/item__map.png');
+}
+
+.VPSidebar a[href='/guide/rules'] .text::before {
+  background-image: url('/icons/item__written_book.png');
+}
+
+.VPSidebar a[href='/guide/faq'] .text::before {
+  background-image: url('/icons/item__bell.png');
+}
+
+.VPSidebar a[href='/features/'] .text::before {
+  background-image: url('/icons/item__golden_apple.png');
+}
+
+.VPSidebar a[href='/commands'] .text::before {
+  background-image: url('/icons/block__redstone_torch.png');
+}
+
+.VPSidebar a[href='/updates/server'] .text::before {
+  background-image: url('/icons/item__oak_sign.png');
+}
+
+.VPSidebar a[href='/updates/client'] .text::before {
+  background-image: url('/icons/item__clock_00.png');
+}
+
+.VPSidebar a[href='/links'] .text::before {
+  background-image: url('/icons/item__recovery_compass_00.png');
+}
+
+/* 分组标题图标：靠组内标志性链接定位，调整分组顺序也不会错位 */
+.VPSidebar .group:has(a[href='/guide/newbie']) .VPSidebarItem.level-0 > .item > .text::before {
+  background-image: url('/icons/item__compass_00.png');
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.VPSidebar .group:has(a[href='/commands']) .VPSidebarItem.level-0 > .item > .text::before {
+  background-image: url('/icons/block__command_block_front.png');
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.VPSidebar .group:has(a[href='/updates/server']) .VPSidebarItem.level-0 > .item > .text::before {
+  background-image: url('/icons/item__bundle.png');
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.VPSidebar .group:has(a[href='/links']) .VPSidebarItem.level-0 > .item > .text::before {
+  background-image: url('/icons/item__ender_eye.png');
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* ── 顶部导航栏图标（MC 贴图）────────────────────────── */
+
+/*
+ * 与侧边栏同理：导航项文字由 <span> 包裹，无法内联 HTML，
+ * 因此用伪元素加载贴图；按 href 定位，条目顺序变化也不受影响。
+ * ⚠ 新增导航项时需在此补一条 background-image 规则。
+ */
+
+.VPNavBarMenuLink > span {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.VPNavBarMenuLink > span::before {
+  content: '';
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+  background: center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+.VPNavBarMenuLink[href='/guide/newbie'] > span::before {
+  background-image: url('/icons/item__map.png');
+}
+
+.VPNavBarMenuLink[href='/guide/rules'] > span::before {
+  background-image: url('/icons/item__written_book.png');
+}
+
+.VPNavBarMenuLink[href='/features/'] > span::before {
+  background-image: url('/icons/item__golden_apple.png');
+}
+
+.VPNavBarMenuLink[href='/commands'] > span::before {
+  background-image: url('/icons/block__redstone_torch.png');
+}
+
+.VPNavBarMenuLink[href='/guide/faq'] > span::before {
+  background-image: url('/icons/item__bell.png');
+}
+
+/* ── 可折叠章节：标题条本身就是折叠触发器 ────────────── */
+
+/*
+ * 实现要点：
+ * · summary 用负 margin 撑满整个卡片宽度、充当标题条；
+ * · 收起/展开时 padding 与边框厚度保持一致，只有 border-color 变化，
+ *   因此点击时标题条高度不会跳动；
+ * · 底部内边距只在展开时给，否则收起状态下标题条下方会多出一截空白
+ *   （鼠标悬停高亮时会明显看到下方有块"空档"）。
+ */
+
+.vp-doc details.mc-section {
+  padding: 0 16px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+}
+
+/* 仅在展开时补底部间距，给内容留呼吸空间 */
+.vp-doc details.mc-section[open] {
+  padding-bottom: 14px;
+}
+
+/* 收起时四角都是圆的，与卡片轮廓贴合 */
+.vp-doc details.mc-section:not([open]) > summary {
+  border-radius: 8px;
+}
+
+.vp-doc details.mc-section > summary {
+  /* 三角形、图标、文字在同一中线上垂直居中 */
+  display: flex;
+  align-items: center;
+  margin: 0 -16px;
+  padding: 11px 16px;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  border-bottom: 1px solid transparent;
+  border-radius: 8px 8px 0 0;
+}
+
+.vp-doc details.mc-section > summary .mc-icon {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  object-fit: contain;
+}
+
+.vp-doc details.mc-section[open] > summary {
+  margin-bottom: 0;
+  padding-bottom: 11px;
+  border-bottom-color: var(--vp-c-divider);
+}
+
+/* 悬停时整条标题高亮，强化「可点击」的暗示（展开态同样生效） */
+.vp-doc details.mc-section > summary:hover {
+  background: var(--vp-c-default-soft);
+}
+
+/* 内容区与标题条拉开距离 */
+.vp-doc details.mc-section[open] > *:not(summary):first-of-type {
+  margin-top: 14px;
+}
+
+.vp-doc details.mc-section > *:not(summary):last-child {
+  margin-bottom: 0;
+}
+
+/* ── 版本记录块（更新动态页）────────────────────────── */
+
+/*
+ * 用法：每个版本一个独立折叠块
+ *   <details class="version">
+ *   <summary>1.0 —— 2026 年 9 月 20 日</summary>
+ *
+ *   内容
+ *
+ *   </details>
+ * 默认收起；最新的版本排在最上面。
+ */
+
+.vp-doc details.version {
+  border-left: 3px solid var(--vp-c-brand-1);
+  margin: 14px 0;
+}
+
+.vp-doc details.version > summary {
+  font-weight: 600;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.vp-doc details.version[open] > summary {
+  color: var(--vp-c-brand-1);
 }
