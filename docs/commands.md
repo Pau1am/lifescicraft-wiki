@@ -17,10 +17,8 @@ title: 常用指令
 
 ## 跨服切换
 
-<div class="mc-head"><img src="/icons/item__ender_pearl.png" class="mc-icon" alt="" />在三个子服之间移动</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/item__ender_pearl.png" class="mc-icon" alt="" />在三个子服之间移动</summary>
 
 - **进入游戏默认在生存服（Survival）**：本服**没有大厅**，登录后直接进入生存服
 - `/server Survival` 切换到生存服
@@ -32,10 +30,8 @@ title: 常用指令
 
 ## 服务端指令（Carpet）
 
-<div class="mc-head"><img src="/icons/block__command_block_front.png" class="mc-icon" alt="" />已向所有玩家开放</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/block__command_block_front.png" class="mc-icon" alt="" />已向所有玩家开放</summary>
 
 本服已向所有玩家开放以下 Carpet 系指令，直接在聊天栏输入即可。
 
@@ -74,10 +70,8 @@ title: 常用指令
 
 ## 镜像服务器使用
 
-<div class="mc-head"><img src="/icons/block__glass.png" class="mc-icon" alt="" />默认关闭，需手动开启</div>
-
-<details>
-<summary>展开 / 收起</summary>
+<details class="mc-section">
+<summary><img src="/icons/block__glass.png" class="mc-icon" alt="" />默认关闭，需手动开启</summary>
 
 镜像服是生存服主世界的**独立副本**：可以在这里自由采集资源、测试建筑与红石方案，而不影响生存服的「生态平衡」。
 
