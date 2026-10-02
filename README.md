@@ -26,12 +26,18 @@ npm run docs:preview   # 预览构建产物
 npm run sync:assets    # 仅同步图片素材
 ```
 
-> Windows 上 `npm install` 有时会漏装 esbuild / rollup 的平台二进制，
-> 已在 `optionalDependencies` 中显式声明。若仍报
-> `The package "@esbuild/win32-x64" could not be found`，执行：
+> **疑难排解**：若报 `The package "@esbuild/win32-x64" could not be found`，
+> 说明 esbuild / rollup 的平台二进制没装上（npm 在 Windows 上的常见问题）。
+> `package-lock.json` 已包含**全部平台**的变体（含 `linux-x64`、`darwin-arm64` 等），
+> 正常情况下 `npm ci` 会自动选对。若仍失败，依次尝试：
 > ```bash
-> npm install @esbuild/win32-x64 @rollup/rollup-win32-x64-msvc --save-optional
+> npm install                # 重新协商依赖树
+> rm -f package-lock.json && npm install   # 最后手段：重建锁文件
 > ```
+>
+> 注意：**不要**把 `@esbuild/win32-x64` 之类写进 `optionalDependencies` 硬编码。
+> 那样会与 vitepress 依赖的 esbuild 次要版本冲突，反而导致 `npm ci` 失败。
+> 保持 `package-lock.json` 记录全平台解析结果才是正解。
 
 ## 目录结构
 
@@ -155,3 +161,13 @@ npm run sync:assets    # 仅同步图片素材
   避免在公开站点上留下空的下载承诺
 - 部署路径 `base` 设为 `'/lifescicraft-wiki/'`，适配默认的 GitHub Pages 子路径地址
 - 新增 `.gitattributes` 统一 LF 换行，便于 Windows / macOS 双向协作
+
+### 1.0.1 —— 2026 年 10 月 2 日
+
+- **修复 CI 构建失败**：`config.mts` 启用了 `lastUpdated`，需要完整 git 历史，
+  而 Actions 默认浅克隆（`fetch-depth: 1`）会导致构建报错。
+  已在 `.github/workflows/deploy-wiki.yml` 的 checkout 步骤加上 `fetch-depth: 0`
+- **修复依赖锁**：先前把 `@esbuild/win32-x64` 等平台包硬编码进 `optionalDependencies`，
+  与 vitepress 依赖的 esbuild 次要版本（0.21.5）冲突，导致 `npm ci` 失败。
+  已移除硬编码，改为生成记录**全平台**解析结果的 `package-lock.json`
+  （23 个 esbuild / 25 个 rollup 平台变体），Windows 与 Linux 均可正常 `npm ci`

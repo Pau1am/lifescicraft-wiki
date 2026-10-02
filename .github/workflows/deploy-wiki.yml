@@ -20,6 +20,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 完整历史：config.mts 启用了 lastUpdated，需要 git log 才能取到每页的更新时间。
+          # 默认的浅克隆（fetch-depth: 1）会导致构建失败。
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
