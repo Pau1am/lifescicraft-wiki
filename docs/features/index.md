@@ -18,7 +18,7 @@ title: 特殊功能
 ## 一、地毯功能 Carpet（含 TIS / Gugle 附属）
 
 <details class="mc-section">
-<summary><img src="https://minecraft.wiki/images/Red_Carpet_JE1_BE1.png" class="mc-icon" alt="" />技术向服务端模组</summary>
+<summary><span class="mc-t"><img src="https://minecraft.wiki/images/Red_Carpet_JE1_BE1.png" class="mc-icon" alt="" />技术向服务端模组</span></summary>
 
 ### 这是什么
 
@@ -58,7 +58,7 @@ Carpet 是一套不改变原版玩法的服务端模组：它给服务器加上�
 ## 二、投影共享 Syncmatica（配合 Litematica）
 
 <details class="mc-section">
-<summary><img src="/icons/block__glass.png" class="mc-icon" alt="" />多人共用同一份蓝图</summary>
+<summary><span class="mc-t"><img src="/icons/block__glass.png" class="mc-icon" alt="" />多人共用同一份蓝图</span></summary>
 
 ### 这是什么
 
@@ -87,7 +87,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 三、图片转地图 Image2Map
 
 <details class="mc-section">
-<summary><img src="/icons/item__painting.png" class="mc-icon" alt="" />把图片变成像素壁画</summary>
+<summary><span class="mc-t"><img src="/icons/item__painting.png" class="mc-icon" alt="" />把图片变成像素壁画</span></summary>
 
 ### 这是什么
 
@@ -125,7 +125,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 四、排行榜 RankBoard
 
 <details class="mc-section">
-<summary><img src="/icons/item__gold_ingot.png" class="mc-icon" alt="" />17 种指标 × 5 种周期</summary>
+<summary><span class="mc-t"><img src="/icons/item__gold_ingot.png" class="mc-icon" alt="" />17 种指标 × 5 种周期</span></summary>
 
 ### 这是什么
 
@@ -154,7 +154,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 五、快捷潜影盒 Quick Shulker
 
 <details class="mc-section">
-<summary><img src="/icons/item__shulker_shell.png" class="mc-icon" alt="" />手持即可打开</summary>
+<summary><span class="mc-t"><img src="/icons/item__shulker_shell.png" class="mc-icon" alt="" />手持即可打开</span></summary>
 
 ### 这是什么
 
@@ -180,7 +180,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 六、语音聊天 Simple Voice Chat
 
 <details class="mc-section">
-<summary><img src="/icons/item__goat_horn.png" class="mc-icon" alt="" />带 3D 方位感的近距离语音</summary>
+<summary><span class="mc-t"><img src="/icons/item__goat_horn.png" class="mc-icon" alt="" />带 3D 方位感的近距离语音</span></summary>
 
 ### 这是什么
 
@@ -215,7 +215,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 七、聊天互通（全服）
 
 <details class="mc-section">
-<summary><img src="/icons/item__oak_sign.png" class="mc-icon" alt="" />三个子服消息实时同步</summary>
+<summary><span class="mc-t"><img src="/icons/item__oak_sign.png" class="mc-icon" alt="" />三个子服消息实时同步</span></summary>
 
 ### 这是什么
 
@@ -242,7 +242,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 八、创世神 WorldEdit（创造服专属）
 
 <details class="mc-section">
-<summary><img src="/icons/item__wooden_axe.png" class="mc-icon" alt="" />批量建造工具</summary>
+<summary><span class="mc-t"><img src="/icons/item__wooden_axe.png" class="mc-icon" alt="" />批量建造工具</span></summary>
 
 ### 这是什么
 
@@ -280,7 +280,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 九、自定义头颅合成（生存服专属）
 
 <details class="mc-section">
-<summary><img src="/icons/head__wither_skeleton_face.png" class="mc-icon" alt="" />服务器自研数据包</summary>
+<summary><span class="mc-t"><img src="/icons/head__wither_skeleton_face.png" class="mc-icon" alt="" />服务器自研数据包</span></summary>
 
 ### 这是什么
 
@@ -303,7 +303,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 十、武器架 Racks（生存服专属）
 
 <details class="mc-section">
-<summary><img src="/icons/item__iron_sword.png" class="mc-icon" alt="" />给工具和武器一个展示位</summary>
+<summary><span class="mc-t"><img src="/icons/item__iron_sword.png" class="mc-icon" alt="" />给工具和武器一个展示位</span></summary>
 
 ### 这是什么
 
@@ -338,7 +338,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 十一、悬挂告示牌 Better Hanging Signs（生存服专属）
 
 <details class="mc-section">
-<summary><img src="/icons/item__oak_hanging_sign.png" class="mc-icon" alt="" />告示牌上挂物品</summary>
+<summary><span class="mc-t"><img src="/icons/item__oak_hanging_sign.png" class="mc-icon" alt="" />告示牌上挂物品</span></summary>
 
 ### 这是什么
 
@@ -364,7 +364,7 @@ Litematica 能把一张「投影」（蓝图）叠加到世界里，照着一步
 ## 十二、更好的盔甲架编辑 Better Armour Stands（生存服专属）
 
 <details class="mc-section">
-<summary><img src="/icons/item__armor_stand.png" class="mc-icon" alt="" />摆姿势、调大小、做雕像</summary>
+<summary><span class="mc-t"><img src="/icons/item__armor_stand.png" class="mc-icon" alt="" />摆姿势、调大小、做雕像</span></summary>
 
 ### 这是什么
 

@@ -16,7 +16,7 @@ title: 新玩家指南
 ## 入服前准备
 
 <details class="mc-section">
-<summary><img src="/icons/item__iron_pickaxe.png" class="mc-icon" alt="" />先把这几件事确认好</summary>
+<summary><span class="mc-t"><img src="/icons/item__iron_pickaxe.png" class="mc-icon" alt="" />先把这几件事确认好</span></summary>
 
 - **游戏版本**：Minecraft Java Edition 26.3
 - **客户端推荐**：本服是 Fabric 生存服，**用原版客户端也能进服**；但[特殊功能](/features/)里的多数功能（投影共享、语音聊天、数据包交互界面等）只有专用客户端才能体验
@@ -30,7 +30,7 @@ title: 新玩家指南
 ## 首次入服
 
 <details class="mc-section">
-<summary><img src="/icons/item__oak_door.png" class="mc-icon" alt="" />第一次连上服务器</summary>
+<summary><span class="mc-t"><img src="/icons/item__oak_door.png" class="mc-icon" alt="" />第一次连上服务器</span></summary>
 
 1. 启动 Minecraft，进入「多人游戏」，点击「添加服务器」
 2. 填入管理组提供的服务器地址并保存
@@ -44,7 +44,7 @@ title: 新玩家指南
 ## 上手建议
 
 <details class="mc-section">
-<summary><img src="/icons/block__oak_sapling.png" class="mc-icon" alt="" />怎么开始玩</summary>
+<summary><span class="mc-t"><img src="/icons/block__oak_sapling.png" class="mc-icon" alt="" />怎么开始玩</span></summary>
 
 - 先通读[服务器规则](/guide/rules)，避免无意间违规
 - **本服基本遵循原版默认玩法**：没有新手福利，也没有出生点设施、传送与经济系统，一切都从原版机制出发

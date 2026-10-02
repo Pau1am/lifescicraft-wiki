@@ -14,21 +14,21 @@ title: 常见问题 FAQ
 </div>
 
 <details>
-<summary>如何获得服务器地址？</summary>
+<summary><span class="mc-t">如何获得服务器地址？</span></summary>
 
 本服为邀请制，不对公众开放。请联系服主或管理组成员获取地址，完整的入服步骤见[新玩家指南](/guide/newbie)。
 
 </details>
 
 <details>
-<summary>客户端需要安装模组吗？</summary>
+<summary><span class="mc-t">客户端需要安装模组吗？</span></summary>
 
 不需要。本服是 Fabric 生存服，**原版客户端可以直接进服**；但[特殊功能](/features/)里的多数功能（投影共享、语音聊天、数据包交互界面等）需要专用客户端才能体验。推荐使用**官方 QQ 群里的最新整合客户端**，已内置所需模组并做了优化，具体见[新玩家指南 › 入服前准备](/guide/newbie)。
 
 </details>
 
 <details>
-<summary>忘记账号信息或更换了设备怎么办？</summary>
+<summary><span class="mc-t">忘记账号信息或更换了设备怎么办？</span></summary>
 
 本服统一使用 **Minecraft Java 正版账号**登录，所以：
 
@@ -39,7 +39,7 @@ title: 常见问题 FAQ
 </details>
 
 <details>
-<summary>在生存服死亡掉了物品怎么办？</summary>
+<summary><span class="mc-t">在生存服死亡掉了物品怎么办？</span></summary>
 
 本服**开启死亡掉落**：死亡时身上的物品与经验会掉落在死亡地点，可以回去捡回来。
 
@@ -50,7 +50,7 @@ title: 常见问题 FAQ
 </details>
 
 <details>
-<summary>我想邀请朋友加入，该怎么做？</summary>
+<summary><span class="mc-t">我想邀请朋友加入，该怎么做？</span></summary>
 
 本服为邀请制，加入需要**现有成员引荐 + 服主确认**，流程如下：
 
@@ -64,7 +64,7 @@ title: 常见问题 FAQ
 </details>
 
 <details>
-<summary>为什么只有我一个人睡觉也能到白天？</summary>
+<summary><span class="mc-t">为什么只有我一个人睡觉也能到白天？</span></summary>
 
 服务器调整了游戏规则：现在的入睡要求是「**只要有 1 名玩家睡觉**」就可以跳过夜晚，而原版默认需要**所有在线玩家**都睡觉。
 

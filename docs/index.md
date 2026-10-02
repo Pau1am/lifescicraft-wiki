@@ -14,7 +14,7 @@
 ## 快速导航
 
 <details class="mc-section">
-<summary><img src="/icons/item__compass_00.png" class="mc-icon" alt="" />想了解什么？</summary>
+<summary><span class="mc-t"><img src="/icons/item__compass_00.png" class="mc-icon" alt="" />想了解什么？</span></summary>
 
 - [新玩家指南](/guide/newbie)——入服前的准备与首次进入
 - [服务器规则](/guide/rules)——先读一遍，避免无意违规
@@ -28,7 +28,7 @@
 ## 服务器概况
 
 <details class="mc-section">
-<summary><img src="/icons/item__oak_sign.png" class="mc-icon" alt="" />一眼看懂 LifeSci-Craft</summary>
+<summary><span class="mc-t"><img src="/icons/item__oak_sign.png" class="mc-icon" alt="" />一眼看懂 LifeSci-Craft</span></summary>
 
 | 项目 | 内容 |
 | --- | --- |
@@ -49,7 +49,7 @@
 ## 最新动态
 
 <details class="mc-section">
-<summary><img src="/icons/item__firework_rocket.png" class="mc-icon" alt="" />更新记录</summary>
+<summary><span class="mc-t"><img src="/icons/item__firework_rocket.png" class="mc-icon" alt="" />更新记录</span></summary>
 
 - [服务器更新动态](/updates/server)——服务端功能与活动的变化
 - [客户端更新动态](/updates/client)——整合包、资源包与模组的变化
@@ -61,7 +61,7 @@
 ## 其他信息
 
 <details class="mc-section">
-<summary><img src="/icons/item__bundle.png" class="mc-icon" alt="" />服务器后台的运作机制</summary>
+<summary><span class="mc-t"><img src="/icons/item__bundle.png" class="mc-icon" alt="" />服务器后台的运作机制</span></summary>
 
 这些是服务器后台的运作机制——日常游玩基本感受不到，但它们也是服务器能够稳定运行的一部分。
 
@@ -92,7 +92,7 @@
 ## 关于本 Wiki
 
 <details class="mc-section">
-<summary><img src="/icons/item__writable_book.png" class="mc-icon" alt="" />本 Wiki 的信息</summary>
+<summary><span class="mc-t"><img src="/icons/item__writable_book.png" class="mc-icon" alt="" />本 Wiki 的信息</span></summary>
 
 <div class="meta-list">
 
