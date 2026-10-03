@@ -42,8 +42,25 @@ export default defineConfig({
       {
         text: '游戏内功能',
         items: [
-          { text: '特殊功能', link: '/features/' },
-          { text: '常用指令', link: '/commands' },
+          {
+            text: '特殊功能',
+            link: '/features/',
+            collapsed: false,
+            items: [
+              { text: 'Mod 功能', link: '/features/mods' },
+              { text: '数据包功能', link: '/features/datapacks' },
+              { text: 'MCDR 插件', link: '/features/mcdr' },
+            ],
+          },
+          {
+            text: '常用指令',
+            link: '/commands',
+            collapsed: false,
+            items: [
+              { text: '基础指令', link: '/commands/basic' },
+              { text: 'MCDR 相关命令', link: '/commands/mcdr' },
+            ],
+          },
         ],
       },
       {

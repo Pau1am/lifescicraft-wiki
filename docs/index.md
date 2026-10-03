@@ -98,10 +98,12 @@
 
 - **维护者**：Pau1AM
 - **AI Agent 辅助撰写**：WorkBuddy（DeepSeek-V4 Flash）
-- **最后维护**：2026 年 10 月 2 日
+- **最后维护**：2026 年 10 月 3 日
 - 本 Wiki 面向服务器成员开放，内容持续更新中
 - 如发现信息过时或有误，欢迎随时联系管理组修订
 
 </div>
+
+<img src="/logo.png" alt="LifeSci-Craft 服务器 logo" class="mc-logo" />
 
 </details>
