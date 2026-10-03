@@ -1,361 +1,83 @@
 # LifeSci-Craft Wiki
 
-LifeSci-Craft 服务器 Wiki 的**图片素材库 + 站点源码**。
+LifeSci-Craft 服务器的 Wiki —— 新玩家指南、服务器规则、特殊功能、常用指令、
+常见问题与更新动态。
 
-本站点由原 Notion 版 Wiki（主页 + 8 个子页面）迁移而来，使用  
-[VitePress](https://vitepress.dev/) 构建，通过 GitHub Pages 发布。正文与图片都在本仓库里。
+- **线上地址**：<https://wiki.pau1am.xyz/>
+- 由原 Notion 版 Wiki 迁移而来，使用 [VitePress](https://vitepress.dev/) 构建，
+  通过 GitHub Pages 发布。正文与图片都在本仓库里。
 
-## 这个仓库承担两件事
+> 本站由站主自行维护。
 
-| 用途          | 位置                                 | 说明                                                                                         |
-| ----------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
-| **图片素材库**   | 根目录 `icons/` `covers/` `features/` | 供 **Notion 版 Wiki** 通过 `raw.githubusercontent.com` 外链引用。**请勿移动或改名**，否则 Notion 上的图标、封面会立即失效 |
-| **站点源码与内容** | `docs/`                            | VitePress 站点：Markdown 正文 + 配置 + 主题                                                         |
+## 仓库内容
 
-> 根目录的图片是**唯一源**。构建前由 `scripts/sync-assets.mjs` 自动复制到 `docs/public/`，  
-> 该目录不纳入版本控制。这样同一张图只存一份，改一处即可同时生效于 Notion 与站点。  
-> 若将来 Notion 版退役，可直接把图片移入 `docs/public/` 并删除同步脚本。
+| 位置 | 说明 |
+| --- | --- |
+| `docs/` | 站点源码：Markdown 正文、配置与样式 |
+| 根目录 `icons/` `covers/` `features/` | 图片素材。**请勿移动或改名** —— Notion 版 Wiki 仍在通过外链引用它们 |
 
-## 本地开发
+图片以根目录为唯一源，构建前由 `scripts/sync-assets.mjs` 复制到 `docs/public/`，
+因此同一张图只需维护一份，Notion 与站点会同时生效。
+
+## 本地预览
 
 ```bash
-npm install            # 首次
-npm run docs:dev       # 本地预览（会先同步图片），http://localhost:5173
-npm run docs:build     # 构建到 docs/.vitepress/dist
-npm run docs:preview   # 预览构建产物
-npm run sync:assets    # 仅同步图片素材
+npm install        # 首次
+npm run docs:dev   # 本地预览，http://localhost:5173
 ```
 
-> **疑难排解**：若报 `The package "@esbuild/win32-x64" could not be found`，  
-> 说明 esbuild / rollup 的平台二进制没装上（npm 在 Windows 上的常见问题）。  
-> `package-lock.json` 已包含**全部平台**的变体（含 `linux-x64`、`darwin-arm64` 等），  
-> 正常情况下 `npm ci` 会自动选对。若仍失败，依次尝试：
->
-> ```bash
-> npm install                # 重新协商依赖树
-> rm -f package-lock.json && npm install   # 最后手段：重建锁文件
-> ```
->
-> 注意：**不要**把 `@esbuild/win32-x64` 之类写进 `optionalDependencies` 硬编码。  
-> 那样会与 vitepress 依赖的 esbuild 次要版本冲突，反而导致 `npm ci` 失败。  
-> 保持 `package-lock.json` 记录全平台解析结果才是正解。
+## 维护须知
 
-## 目录结构
-
-```
-.
-├─ icons/                 # 42 张 MC 物品贴图（Notion 外链源 + 站点图标）
-├─ covers/                # 11 张页面封面图
-├─ features/              # 7 张模组功能截图
-├─ scripts/
-│   └─ sync-assets.mjs    # 根目录图片 → docs/public/
-├─ .github/workflows/
-│   └─ deploy-wiki.yml    # 推送 main 自动部署到 GitHub Pages
-└─ docs/
-    ├─ .vitepress/
-    │   ├─ config.mts     # 导航 / 侧边栏 / 搜索 / noindex
-    │   └─ theme/
-    │       ├─ index.ts
-    │       └─ custom.css # MC 像素风格式
-    ├─ public/            # 站点静态资源（构建时原样复制）
-    │   ├─ robots.txt     # 禁止搜索引擎收录
-    │   ├─ .nojekyll
-    │   └─ icons|covers|features/   # 由同步脚本生成，已 gitignore
-    ├─ index.md                    # 主页
-    ├─ guide/
-    │   ├─ newbie.md               # 新玩家指南
-    │   ├─ rules.md                # 服务器规则
-    │   └─ faq.md                  # 常见问题 FAQ
-    ├─ features/index.md           # 特殊功能（12 个模组章节）
-    ├─ commands.md                 # 常用指令
-    ├─ links.md                    # 相关链接
-    └─ updates/
-        ├─ server.md               # 服务器更新动态
-        └─ client.md               # 客户端更新动态
-```
-
-## 页面与文件对照
-
-| 原 Notion 页面 | 现文件                      |
-| ----------- | ------------------------ |
-| 主页          | `docs/index.md`          |
-| 新玩家指南       | `docs/guide/newbie.md`   |
-| 服务器规则       | `docs/guide/rules.md`    |
-| 特殊功能        | `docs/features/index.md` |
-| 常用指令        | `docs/commands.md`       |
-| 常见问题 FAQ    | `docs/guide/faq.md`      |
-| 服务器更新动态     | `docs/updates/server.md` |
-| 客户端更新动态     | `docs/updates/client.md` |
-| 相关链接        | `docs/links.md`          |
-
-## 写作约定
-
-- **图片用仓库内相对路径**：`/icons/item__map.png`、`/features/racks.png`。  
-  资源位于 `docs/public/` 下，引用时**不带 `public`** 前缀。
-- **章节标题即折叠块**用 `mc-section`：标题条本身就是折叠触发器，  
-  点标题展开／收起，不需要额外的「展开 / 收起」行。**推荐用于所有章节**：
-  ```html
-  <details class="mc-section">
-  <summary><img src="/icons/item__bell.png" class="mc-icon" alt="" />章节名</summary>
-
-  内容（Markdown，与 `<summary>` 之间**必须留空行**）
-
-  </details>
-  ```
-  收起时标题条悬停会整条高亮，提示可点击；展开／收起高度不跳动。
-- **不需要折叠的纯标题条**用 `mc-head`，分两种情况：
-  - **不需要**出现在右侧「本页目录」里 → 直接写 `<div>`：
-    ```html
-    <div class="mc-head"><img src="/icons/item__bell.png" class="mc-icon" alt="" />章节名</div>
-    ```
-  - **需要**出现在目录里（更新动态页的「更新记录」就是这样）→ 必须把它写成
-    **Markdown 标题**，因为只有 `## xxx` 才会生成 id；`<div>` 和裸 `<h2>` 都**不会**
-    被 VitePress 的标题插件处理。  
-    但⚠ **不要把 `<img>` 写进标题文字**（如 `## <img … />更新记录`）——
-    那会让锚点的 `aria-label` 把整段 HTML 原样拼进去（读屏会念出一串源码）。
-    正确写法是让**图标与标题并列**，由 `.mc-head` 的 flex 排成「图标 + 标题」：
-    ```html
-    <div class="mc-head">
-    <img src="/icons/item__bell.png" class="mc-icon" alt="" />
-
-    ## 章节名
-
-    </div>
-    ```
-    `custom.css` 中的 `.mc-head > h2` 规则会把 VitePress 给 `h2` 的默认样式
-    （24px 字号、上边框、48px 间距）复位回标题条的外观。
-- **纯折叠内容**（如 FAQ 问答、版本记录）用原生 `<details>` / `<summary>`，  
-  summary 里直接写标题即可，**不加 `open` 属性即为默认收起**。
-- **提示条**用 `<div class="mc-note">`，内部文字与 `<div>` 之间**必须留空行**，  
-  否则 markdown-it 会按原始 HTML 透传、不解析其中的 Markdown。
-- **功能截图**：
-  ```html
-  <figure class="feature-shot">
-    <img src="/features/racks.png" alt="描述" />
-    <figcaption>图注</figcaption>
-  </figure>
-  ```
-- **更新动态页的版本记录**：**每个版本一个独立折叠块**，最新的排在最上面。  
-  默认收起，只露出各版本号，点开才看细节：
-  ```html
-  <details class="version">
-  <summary>1.1 —— 2026 年 10 月 5 日</summary>
-
-  改动条目（Markdown 列表）
-
-  </details>
-  ```
-- **侧边栏与顶部导航栏的图标**均在 `docs/.vitepress/theme/custom.css` 中维护  
-  （侧边栏在「侧边栏图标」一节，导航栏在「顶部导航栏图标」一节）。  
-  VitePress 的这两处文字**都不支持内联 HTML**，图标是用伪元素加载 MC 贴图实现的：  
-  按 `href` 属性定位，因此调整顺序不会错位。  
-  ⚠ **新增侧边栏条目、分组或导航项时，必须在那里补一条 `background-image` 规则**，  
-  否则该项会空出一格。
-- **强调色**在 `custom.css` 顶部的 `:root` / `.dark` 中定义（绿色，见下节）。
-- **动画参数集中在 `custom.css` 的「动画参数」一节**，想调手感只改这几个变量即可：
-  ```css
-  :root {
-    --mc-anim-dur: 0.4s;         /* 内容展开 / 收起 */
-    --mc-anim-dur-hover: 0.28s;  /* 悬停等即时反馈（比内容动画更短才跟手） */
-    --mc-anim-dur-nudge: 0.7s;   /* 点击「不可展开的框」的弹跳（内含 3 次余振，故较长） */
-    --mc-anim-ease: cubic-bezier(0.65, 0, 0.25, 1.45);      /* 主缓动：由慢到快 + 末端回弹 */
-    --mc-anim-ease-soft: cubic-bezier(0.65, 0, 0.35, 1);    /* 柔和版（无过冲），用于高度过渡 */
-  }
-  ```
-  主缓动的第 1 控制点 `(0.65, 0)` 让前段几乎贴着 0 走 = **起步慢**；  
-  第 2 控制点 `y = 1.45 > 1` 让曲线冲过目标再回落 = **末端弹**。  
-  把 `y` 调大更弹，调成 `1` 即无回弹。
-  > 经验：**动画「看不看得见」主要取决于缓动，而不是时长**。  
-  > 早先用「前段快」的缓动（如 `ease-out`）时，0.3s 的旋转几乎察觉不到；  
-  > 换成「起步慢」的曲线后，即使只有 0.28s 也能看清过程。
-- **折叠动画**（全站折叠块自动生效，页面里无需任何标记）：
-  - 三角形：默认指向右；展开后指向下；收起状态下悬停时「旋转 90° 并向下落 5px」
-  - ⚠ **收起后三角形要能转回指向右**：鼠标点击收起后通常仍停在标题条上，  
-    此时若继续套用悬停旋转，会出现「内容已收起、箭头却指向下」的矛盾。  
-    纯 CSS **无法区分「鼠标移入」与「刚点击收起」**（两者都只是 `:hover`），  
-    因此由 `theme/Layout.vue` 在 `toggle` 收起时给 summary 加 `.mc-no-hover-turn`  
-    抑制该旋转（鼠标离开后自动移除，悬停预览恢复正常）。  
-    相关 DOM 事件细节：`toggle` **不冒泡**，须在**捕获阶段**监听
-  - 标题内容：悬停时整体**向右轻移 4px 并放大 4.5%**，配合三角形共同提示可点击
-  - 内容**展开与收起都有动画**：展开时带过冲（有轻微「弹」感），收起时柔和收拢
-  - ⚠ **两个 `<details>` 原生限制，是本项目动画的核心难点**：
-    1. **高度是 `auto`，CSS 无法直接过渡** → 用 `::details-content` + `interpolate-size`
-    2. **关闭瞬间内容会被隐藏，收起动画根本来不及播** →  
-       必须把 `content-visibility` 也纳入过渡并加 `allow-discrete`  
-       （`transition: …, content-visibility <时长> allow-discrete`），  
-       让内容在高度收缩完成前保持可见。**漏掉这一条就会出现「展开有动画、收起直接跳回」**
-  - 内层内容用 `transition` 而非 `animation`：`animation` 只在 `[open]` 时应用，  
-    收起瞬间就被移除，播不出退场动画。`transition` 的取值来自**目标状态**，  
-    因此可以给展开与收起**分别指定缓动**（展开取 `[open]` 上的值 → 过冲；  
-    收起取基础规则上的值 → 柔和）
-  - 不支持 `::details-content` 的浏览器退化为「仅展开有动画」（`@supports not` 分支），  
-    这是元素原生能力所限
-- ⚠ **`<summary>` 的内容必须包在 `<span class="mc-t">` 里**（共 37 处）。  
-  原因：标题文字在 summary 中是**裸文本节点**，CSS 无法对它应用 `transform`，  
-  必须先有元素才能做位移与缩放。写新页面时照下面写：
-  ```html
-  <details class="mc-section">
-  <summary><span class="mc-t"><img src="/icons/x.png" class="mc-icon" alt="" />标题</span></summary>
-
-  内容
-
-  </details>
-  ```
-  （`.mc-t` 自带 `gap: 10px` 负责图标与文字的间距，`summary` 的 `gap` 负责三角形与内容的间距）
-- **分页过渡**：`theme/Layout.vue` 在路由变化时铺一层与背景同色的遮罩并淡出，  
-  形成「淡出 → 淡入」的观感。VitePress 1.x 未内建 View Transitions，故自行实现。  
-  ⚠ 遮罩动画时长（`custom.css` 的 `0.45s`）与 `Layout.vue` 中的 `500ms` 需保持同步
-- **平滑滚动**：点击「本页目录」或锚点时滑动到目标，而非瞬间跳转。  
-  起因：VitePress 只在点击标题旁的 `#` 锚点（`.header-anchor`）时才平滑滚动
-  （`scrollTo(link, hash, link.classList.contains('header-anchor'))`），
-  而「本页目录」的链接类名是 `.outline-link`，走的是 `window.scrollTo(0, top)` 瞬跳分支。  
-  解法是在 CSS 中给 `html.mc-smooth` 设 `scroll-behavior: smooth` ——
-  位置式 `window.scrollTo(x, y)` 的默认 `behavior` 为 `auto`，会遵循滚动容器的该值，
-  因此无需改动 VitePress 源码。  
-  ⚠ **为什么必须带 `.mc-smooth` 类、不能直接写 `html`**：换页时 VitePress 同样会
-  `window.scrollTo(0, 0)` 回到顶部，若全局生效会看到内容向上滑动。
-  `theme/index.ts` 的 `enhanceApp` 接管 `onBeforeRouteChange` / `onAfterRouteChange`
-  两个钩子（VitePress 自身未占用，可安全接管），导航前移除该类、导航后恢复；  
-  另设 1.5s 兜底计时器，防止导航被中断导致该类永久丢失。  
-  ⚠ 恢复时机：VitePress 的「回到顶部」发生在 `nextTick` 回调里，可能晚于
-  `onAfterRouteChange`，故恢复要延后一帧再加一个宏任务。  
-  ⚠ 系统开启「减少动态效果」时会自动失效（VitePress 自带的
-  `scroll-behavior: auto !important` 优先级更高）
-- ⚠ **「本页目录」只收 h2，`config.mts` 的 `outline.level` 必须保持 `[2, 2]`，不要改成 `[2, 3]`**。  
-  本站的 h3 全部写在 `<details class="mc-section">` 里（章节标题条本身是 h2，
-  条内的「这是什么 / 怎么用」等才是 h3），而 VitePress 的目录**不过滤元素是否可见**——
-  h3 会被照收录进目录，但它们藏在默认收起的折叠块里，于是：
-  1. 目录里出现一堆点不开、也滚不到的条目；
-  2. **高亮与左侧指示线会乱跳** —— 高亮计算（`useActiveAnchor`）用的是同一份标题列表，
-     而不可见元素的 `offsetTop` 取值异常（全为 0），会被误判成「已滚过的当前项」。
-
-  只收 h2 后，目录条目全部可见、点击定位准确、高亮稳定。
-  （改前特殊功能页 56 条、首页 8 条；改后分别为 12 条和 5 条）
-- 全部动画都遵循 `prefers-reduced-motion`。  
-  ⚠ **注意**：VitePress 自带一条全局规则，系统开启「减少动态效果」时会用 `!important`  
-  灭活所有动画与过渡——届时本文件的动画一律不生效。
-- ⚠ **`custom.css` 末尾的「减少动态效果降级」一节必须保持在文件最后**。  
-  那些规则与前面的动画规则**特异性相同**，只能靠声明顺序胜出；  
-  一旦被移到前面就会被覆盖，导致降级失效（曾踩过这个坑）。
-- **点击「不可展开的框」的弹跳反馈**：`.mc-head`（普通标题条）与 `.mc-note`（提示框）  
-  长得像可折叠区块却点不开，点击时弹跳 **3 次、强度由强到弱**  
-  （振幅 `1.024 → 1.016 → 1.008`，每次回弹略低于 1，形成逐渐收敛的余振），  
-  明确传达「此处没有隐藏内容」。`Layout.vue` 在点击时加 `.mc-nudge` 类，动画结束即移除。  
-  实现注意：点链接 / 按钮 / 折叠标题时**不触发**；连点需先移除类并读 `offsetWidth`  
-  强制回流，否则动画不会重新播放
-- 站内跳转一律用**站内相对链接**（如 `/guide/rules`）。  
-  中文标题的锚点 slug 不可预测，**不要手写中文锚点**，链接到页面即可。
-- 标题格式沿用原约定：**中文在前、英文在后**。
-
-## 部署
-
-推送 `main` 分支后由 GitHub Actions 自动构建并部署。
-
-需要一次性配置：仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**。  
-（若误选「分支 / root」，GitHub 会尝试用 Jekyll 处理整个仓库。）
-
-### ⚠ base 路径：决定资源能否加载
-
-`docs/.vitepress/config.mts` 里的 `base` 必须与访问方式匹配，**配错会导致页面能打开但 CSS 与图片全部 404**：
-
-| 访问方式                                                      | `base` 应设为              |
-| --------------------------------------------------------- | ----------------------- |
-| 绑定了自定义域名 `https://wiki.pau1am.xyz/`                       | `'/'` ← **当前设置**        |
-| 默认 Pages 地址 `https://pau1am.github.io/lifescicraft-wiki/` | `'/lifescicraft-wiki/'` |
-
-绑定自定义域名的步骤：仓库 Settings → Pages → Custom domain 填入域名并勾选 Enforce HTTPS，  
-再到域名 DNS 添加 `CNAME` 记录指向 `pau1am.github.io`。**改完域名记得同步改 `base`。**
-
-当前实际部署：自定义域名为 `wiki.pau1am.xyz`，DNS 托管在 DNSPod。  
-`wiki` 记录须为 `CNAME → pau1am.github.io`（不能再是 A 记录）。
-
-### 关于搜索引擎收录
-
-站点**公开可访问，但不希望被搜索引擎收录**，已做双重设置：
-
-- `docs/public/robots.txt` → `Disallow: /`
-- `config.mts` 的 `head` 中注入 `<meta name="robots" content="noindex, nofollow">`（作用于全部页面）
-
-如需允许收录，两处都要改。
-
-### 访问控制说明
-
-站点内容本身不含任何进服入口（**无服务器地址 / IP、无 QQ 群号、无客户端下载链接**），  
-防线由**白名单 + 客户端分发**承担。因此公开托管不构成额外泄露面。
+- 改 `docs/` 下的 Markdown 后推送到 `main`，会自动重新部署
+- 换图片请放进**根目录**（不是 `docs/public/`），构建时会自动同步
+- `config.mts` 的 `base` 需与访问方式一致（绑自定义域名时为 `'/'`），
+  配错会导致 CSS 与图片全部 404
+- 站点公开可访问但不希望被搜索引擎收录，已设 `robots.txt` + `noindex`
 
 ## 变更记录
 
-### 1.2 —— 2026 年 10 月 3 日
+<details>
+<summary>1.2 —— 2026 年 10 月 3 日</summary>
 
-导航体验完善：补上平滑滚动，并修正右侧「本页目录」的两处问题。
+导航体验完善。
 
-**平滑滚动**
-- 点击右侧「本页目录」或锚点时**平滑滑动**到目标，不再瞬间跳转。
-  起因是 VitePress 只在点击标题旁的 `#` 锚点时才平滑滚动，「本页目录」的
-  `.outline-link` 走的是瞬跳分支；解法见「写作约定」
-- 换页时仍保持即时回顶（导航期间临时关闭平滑），避免看到内容向上滑动
+- 点击右侧「本页目录」或锚点时平滑滚动到目标，不再瞬间跳转
+- 右侧目录改为只收章节标题（h2）：条目更精简，滚动时高亮也更稳
+- 常见问题与两个更新动态页补上小标题，现在 9 个页面都有「本页目录」
 
-**「本页目录」修正**
-- **目录范围收窄为只收 h2**（`outline.level: [2, 2]`）。此前收 h2 + h3，
-  而本站 h3 **全部**在默认收起的折叠块内，会同时造成两个问题：
-  1. 目录里出现大量点不开、也滚不到的条目（特殊功能页曾多达 56 条，现为 12 条）
-  2. **高亮与左侧指示线乱跳** —— 高亮计算用的是同一份标题列表，
-     而折叠块内元素的 `offsetTop` 取值异常，会被误判成「已滚过的当前项」
-- **补全「帮助与动态」三页的目录**：这三页原先没有任何标题，故整块不显示。
-  现给 FAQ 加了三个分组标题，两个更新页的「更新记录」改为真标题——**9/9 页均有目录**
-- ⚠ 把标题条写成真标题时，**图标必须与标题并列**，不可写进标题文字
-  （否则锚点的 `aria-label` 会拼进整段 HTML，读屏会念出源码），
-  写法与原因见「写作约定」
+</details>
 
-### 1.1 —— 2026 年 10 月 3 日
+<details>
+<summary>1.1 —— 2026 年 10 月 3 日</summary>
 
-界面与交互打磨：延续原 Notion 版 Wiki 的视觉风格，并完善折叠交互。
+界面与交互打磨。
 
-**外观**
-- 侧边栏（4 个分组 + 9 个链接项）与顶部导航栏（5 项）全部配上 MC 贴图图标。
-  这两处文字**都不支持内联 HTML**，故用伪元素 + 贴图背景实现（维护要点见「写作约定」）
-- **全站强调色由 VitePress 默认的靛蓝改为绿色**（浅色 `#2f7d52` / 深色 `#5cc98a`），
-  链接、侧边栏选中态、悬停态一并变绿
-- 修正收起状态下标题条下方多出一截空白的问题
+- 侧边栏与顶部导航栏配上 MC 贴图图标
+- 全站强调色改为绿色
+- 章节标题与折叠块合并：点标题即可展开／收起，不再单独占一行「展开 / 收起」
+- 折叠展开／收起、三角形旋转、标题悬停、点击反馈、页面切换均加上动画
 
-**折叠交互**
-- 章节标题与折叠块合并为 `details.mc-section`（共 29 处）：标题条本身即为折叠触发器，
-  不再单独占一行「展开 / 收起」；更新动态页改为「每个版本一个折叠块」
-- 三角形：默认指向右，展开后指向下；悬停时旋转 90° 并向下落 5px；
-  收起后自动转回（此处需 JS 辅助，原因见「写作约定」）
-- 标题内容：悬停时整体向右轻移 4px 并放大 4.5%
-- **内容展开与收起都有动画**：展开带过冲（有弹性），收起柔和收拢。
-  为此给 37 处 `<summary>` 的内容包了 `<span class="mc-t">`
-- 点击不可展开的框（`.mc-head` / `.mc-note`）时弹跳 3 次、强度由强到弱，
-  明确传达「此处没有隐藏内容」
-- 新增分页过渡：切换页面时整体淡出再淡入（VitePress 1.x 未内建 View Transitions）
+</details>
 
-**工程**
-- 动画时长与缓动集中为 `--mc-anim-*` 变量，便于统一调整
-- 修正 reduced-motion 降级的层叠顺序问题（该节须置于 `custom.css` 最末尾）
-- 排查「首页图片未加载」：全站 9 页、79 个资源引用实测全部 200，判定为浏览器缓存
+<details>
+<summary>1.0.1 —— 2026 年 10 月 2 日</summary>
 
-### 1.0.1 —— 2026 年 10 月 2 日
+部署与构建。
 
-- **切换为自定义域名部署**：`base` 由 `'/lifescicraft-wiki/'` 改为 `'/'`，
-  配合 GitHub Pages 绑定的 `wiki.pau1am.xyz`。
-  原地址此前由自有服务器（nginx）301 跳转到 Notion 版，改为 Pages 托管后该跳转不再生效
-- **修复 CI 构建失败**：`config.mts` 启用了 `lastUpdated`，需要完整 git 历史，
-  而 Actions 默认浅克隆（`fetch-depth: 1`）会导致构建报错 → checkout 步骤加 `fetch-depth: 0`
-- **修复依赖锁**：把 `@esbuild/win32-x64` 等硬编码进 `optionalDependencies`，
-  会与 vitepress 依赖的 esbuild 次要版本（0.21.5）冲突、导致 `npm ci` 失败。
-  改为生成记录**全平台**解析结果的 `package-lock.json`
+- 绑定自定义域名 `wiki.pau1am.xyz`，站点改由该域名发布
+- 修复 CI 构建失败与依赖锁问题
 
-### 1.0 —— 2026 年 10 月 2 日
+</details>
 
-- 由 Notion 版 Wiki 迁移为 VitePress 站点；正文与图片纳入本仓库
-- **不再使用外部图床**：原 `raw.githubusercontent.com` 外链在站点内改为仓库内相对路径
-  （Notion 侧仍沿用根目录外链，两者共用同一份图片源）
-- 新增原生侧边栏导航；移除 8 个子页面顶部原有的「Wiki 导航」提示条
-  （该提示条原本是为弥补 Notion 发布站没有侧边栏而设，现由侧边栏取代）
-- 全站章节改为**默认收起**的折叠块（Notion API 无法设置默认收起）
-- 搜索改用 VitePress 本地搜索，自带中文分词
-- 新增 MC 像素风格式（`theme/custom.css`）与 `scripts/sync-assets.mjs`（根目录图片同步）
+<details>
+<summary>1.0 —— 2026 年 10 月 2 日</summary>
+
+由原 Notion 版 Wiki 迁移为 VitePress 站点。
+
+- 正文与图片纳入本仓库；新增原生侧边栏，章节默认收起
+- 搜索改用 VitePress 本地搜索（自带中文分词）
+- 新增 MC 像素风格式与图片同步脚本
 - 启用 `noindex` + `robots.txt`，避免被搜索引擎收录
-- 「相关链接」页移除「客户端下载」章节（含「备用下载通道」占位符）
-- 新增 `.gitattributes` 统一 LF 换行，便于 Windows / macOS 双向协作
+- 「相关链接」页移除客户端下载章节
+
+</details>
