@@ -450,6 +450,17 @@ details > *:not(summary):last-child {
   display: block;
 }
 
+/* 「关于本 Wiki」页尾的服务器 logo —— 居中展示 */
+.mc-logo {
+  display: block;
+  width: 220px;
+  max-width: 62%;
+  height: auto;
+  margin: 22px auto 6px;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+}
+
 /* 「关于本 Wiki」用的紧凑列表 */
 .meta-list {
   font-size: 13.5px;
@@ -525,6 +536,28 @@ details > *:not(summary):last-child {
   background-image: url('/icons/item__recovery_compass_00.png');
 }
 
+/* 「特殊功能」下的三个二级页面 */
+.VPSidebar a[href='/features/mods'] .text::before {
+  background-image: url('/icons/item__iron_pickaxe.png');
+}
+
+.VPSidebar a[href='/features/datapacks'] .text::before {
+  background-image: url('/icons/item__bundle.png');
+}
+
+.VPSidebar a[href='/features/mcdr'] .text::before {
+  background-image: url('/icons/block__command_block_side.png');
+}
+
+/* 「常用指令」下的二级页面 */
+.VPSidebar a[href='/commands/basic'] .text::before {
+  background-image: url('/icons/block__command_block_front.png');
+}
+
+.VPSidebar a[href='/commands/mcdr'] .text::before {
+  background-image: url('/icons/item__book.png');
+}
+
 /* 分组标题图标：靠组内标志性链接定位，调整分组顺序也不会错位 */
 .VPSidebar .group:has(a[href='/guide/newbie']) .VPSidebarItem.level-0 > .item > .text::before {
   background-image: url('/icons/item__compass_00.png');
@@ -581,32 +614,45 @@ details > *:not(summary):last-child {
 
 /* ── 左侧边栏 ── */
 
-.VPSidebar .VPSidebarItem.level-1 {
+/*
+ * ⚠ 只作用于**真正的链接项**（`.is-link` 且**不是**可折叠的父项）。
+ *
+ * 原因：侧边栏升级为两级结构后，「特殊功能 / 常用指令」这类**可折叠父项**
+ * 也是 level-1。若缩放它们，`transform` 会**连带缩放其整个子树**，
+ * 既难看又会把子项一起撑出容器。因此用 `:not(.collapsible)` 排除父项，
+ * 效果只落在叶子链接上（栏目内的一级链接、以及父项下的二级链接）。
+ */
+.VPSidebar .VPSidebarItem.is-link:not(.collapsible) {
   transform-origin: left center;
   transition: transform var(--mc-anim-dur-hover) var(--mc-anim-ease);
 }
 
 /* 被悬停：放大最多，并轻微右移，像被拨出来 */
-.VPSidebar .VPSidebarItem.level-1:hover {
+.VPSidebar .VPSidebarItem.is-link:not(.collapsible):hover {
   transform: translateX(3px) scale(var(--mc-wheel-1));
 }
 
 /* 其后第 1、2 格 */
-.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1 {
-  transform: translateX(1.5px) scale(var(--mc-wheel-2));
-}
-
-.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1 + .VPSidebarItem.level-1 {
-  transform: translateX(0.6px) scale(var(--mc-wheel-3));
-}
-
-/* 其前第 1、2 格（用 :has 反向匹配） */
-.VPSidebar .VPSidebarItem.level-1:has(+ .VPSidebarItem.level-1:hover) {
+.VPSidebar .VPSidebarItem.is-link:not(.collapsible):hover + .VPSidebarItem.is-link:not(.collapsible) {
   transform: translateX(1.5px) scale(var(--mc-wheel-2));
 }
 
 .VPSidebar
-  .VPSidebarItem.level-1:has(+ .VPSidebarItem.level-1 + .VPSidebarItem.level-1:hover) {
+  .VPSidebarItem.is-link:not(.collapsible):hover
+  + .VPSidebarItem.is-link:not(.collapsible)
+  + .VPSidebarItem.is-link:not(.collapsible) {
+  transform: translateX(0.6px) scale(var(--mc-wheel-3));
+}
+
+/* 其前第 1、2 格（用 :has 反向匹配） */
+.VPSidebar .VPSidebarItem.is-link:not(.collapsible):has(+ .VPSidebarItem.is-link:not(.collapsible):hover) {
+  transform: translateX(1.5px) scale(var(--mc-wheel-2));
+}
+
+.VPSidebar
+  .VPSidebarItem.is-link:not(.collapsible):has(
+    + .VPSidebarItem.is-link:not(.collapsible) + .VPSidebarItem.is-link:not(.collapsible):hover
+  ) {
   transform: translateX(0.6px) scale(var(--mc-wheel-3));
 }
 
@@ -865,7 +911,7 @@ details > *:not(summary):last-child {
    * （如 `.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1`），
    * 不这么做就得把它们逐条复制一遍。
    */
-  .VPSidebar .VPSidebarItem.level-1,
+  .VPSidebar .VPSidebarItem.is-link:not(.collapsible),
   .VPDocAsideOutline .VPDocOutlineItem > li {
     transform: none !important;
   }
