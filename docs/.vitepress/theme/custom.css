@@ -549,13 +549,13 @@ details > *:not(summary):last-child {
   background-image: url('/icons/block__command_block_side.png');
 }
 
-/* 「常用指令」下的二级页面 */
+/* 「常用指令」下的二级页面 —— MCDR 相关命令沿用站点统一的 MCDR 标识（命令方块·侧） */
 .VPSidebar a[href='/commands/basic'] .text::before {
   background-image: url('/icons/block__command_block_front.png');
 }
 
 .VPSidebar a[href='/commands/mcdr'] .text::before {
-  background-image: url('/icons/item__book.png');
+  background-image: url('/icons/block__command_block_side.png');
 }
 
 /* 分组标题图标：靠组内标志性链接定位，调整分组顺序也不会错位 */

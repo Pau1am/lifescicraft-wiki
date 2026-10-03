@@ -5,7 +5,7 @@ title: MCDR 相关命令
 <img src="/covers/4_command__ExplorationUpdate.jpg" alt="MCDR 相关命令" class="hero-cover" />
 
 <div class="mc-note">
-<img src="/icons/item__book.png" class="mc-icon" alt="" />
+<img src="/icons/block__command_block_side.png" class="mc-icon" alt="" />
 <div>
 
 本页收录由 **MCDR 插件**提供的指令。它们以 **`!!` 两个感叹号**开头（**不是 `/`**），直接在游戏内聊天栏输入。
