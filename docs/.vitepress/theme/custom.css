@@ -550,6 +550,109 @@ details > *:not(summary):last-child {
   height: 1.15em;
 }
 
+/* ── 左右侧导航：拨轮式悬停 ─────────────────────────── */
+
+/*
+ * 「拨轮」效果：鼠标停在某一项上时，该项放大最多，上下相邻项按距离递减地
+ * 跟着放大，形成一条平滑的缩放曲线 —— 像拨动轮盘时相邻档位被带动。
+ *
+ * 纯 CSS 即可做出左右对称的衰减，靠两个方向的兄弟选择器配合：
+ *   · 往后的方向 → `:hover + X`、`:hover + X + X`
+ *   · 往前的方向 → `:has(+ X:hover)`，即「紧邻我的那一项正被悬停」
+ * `:has()` 是这套效果能成立的关键（本站已在多处使用，无新增兼容性风险）。
+ *
+ * 可调参数（越远的一格衰减越多，再远就不缩放，避免整列一起晃动）：
+ *   --mc-wheel-1  被悬停的那一项
+ *   --mc-wheel-2  相邻 1 格
+ *   --mc-wheel-3  相邻 2 格
+ *
+ * 两点设计约束：
+ *   1. `transform-origin` 统一取**左侧** —— 放大时向右延展，不会越过容器左边界；
+ *      transform 不参与布局，因此放大不会把其它条目挤开、也不会引发行高抖动。
+ *   2. 行高固定、行内有富余空白，所以 5% 的放大会让相邻行视觉上轻微重叠，
+ *      但不会真的碰到文字。
+ */
+
+:root {
+  --mc-wheel-1: 1.05;
+  --mc-wheel-2: 1.026;
+  --mc-wheel-3: 1.011;
+}
+
+/* ── 左侧边栏 ── */
+
+.VPSidebar .VPSidebarItem.level-1 {
+  transform-origin: left center;
+  transition: transform var(--mc-anim-dur-hover) var(--mc-anim-ease);
+}
+
+/* 被悬停：放大最多，并轻微右移，像被拨出来 */
+.VPSidebar .VPSidebarItem.level-1:hover {
+  transform: translateX(3px) scale(var(--mc-wheel-1));
+}
+
+/* 其后第 1、2 格 */
+.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1 {
+  transform: translateX(1.5px) scale(var(--mc-wheel-2));
+}
+
+.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1 + .VPSidebarItem.level-1 {
+  transform: translateX(0.6px) scale(var(--mc-wheel-3));
+}
+
+/* 其前第 1、2 格（用 :has 反向匹配） */
+.VPSidebar .VPSidebarItem.level-1:has(+ .VPSidebarItem.level-1:hover) {
+  transform: translateX(1.5px) scale(var(--mc-wheel-2));
+}
+
+.VPSidebar
+  .VPSidebarItem.level-1:has(+ .VPSidebarItem.level-1 + .VPSidebarItem.level-1:hover) {
+  transform: translateX(0.6px) scale(var(--mc-wheel-3));
+}
+
+/* ── 右侧「本页目录」── */
+
+/*
+ * ⚠ 必须先腾出右侧空隙，否则放大动画会被裁掉。
+ * `.VPDocAsideOutline .content` 默认没有 padding-right，条目右边缘紧贴 224px 的
+ * aside 容器，而该容器是 `overflow-x: hidden`（且不能改成 visible ——
+ * 按 CSS 规范，某轴为 hidden/auto 时另一轴的 visible 会被计算成 auto，
+ * 会引入横向滚动条）。因此这里留 16px 给「放大 + 右移」用。
+ * 代价：目录文字可用宽度由约 207px 收窄到约 191px，长条目的截断点略微前移。
+ * 左侧边栏无需此举 —— 它的 padding 是 32px，放大后有充足余量。
+ */
+.VPDocAsideOutline .content {
+  padding-right: 16px;
+}
+
+.VPDocAsideOutline .VPDocOutlineItem > li {
+  transform-origin: left center;
+  transition: transform var(--mc-anim-dur-hover) var(--mc-anim-ease);
+}
+
+/* 被悬停 */
+.VPDocAsideOutline .VPDocOutlineItem > li:hover {
+  transform: translateX(2px) scale(var(--mc-wheel-1));
+}
+
+/* 其后第 1、2 格 */
+.VPDocAsideOutline .VPDocOutlineItem > li:hover + li {
+  transform: translateX(1px) scale(var(--mc-wheel-2));
+}
+
+.VPDocAsideOutline .VPDocOutlineItem > li:hover + li + li {
+  transform: translateX(0.4px) scale(var(--mc-wheel-3));
+}
+
+/* 其前第 1、2 格 */
+.VPDocAsideOutline .VPDocOutlineItem > li:has(+ li:hover) {
+  transform: translateX(1px) scale(var(--mc-wheel-2));
+}
+
+.VPDocAsideOutline .VPDocOutlineItem > li:has(+ li + li:hover) {
+  transform: translateX(0.4px) scale(var(--mc-wheel-3));
+}
+
 /* ── 顶部导航栏图标（MC 贴图）────────────────────────── */
 
 /*
@@ -754,5 +857,16 @@ details > *:not(summary):last-child {
   /* 关掉动画后遮罩回落到基础态 opacity:0，即不做分页过渡 */
   .mc-page-veil.is-active {
     animation: none;
+  }
+
+  /*
+   * 左右侧导航的拨轮缩放：连同相邻项的联动一起取消。
+   * 这里用 !important —— 联动规则的选择器特异性很高
+   * （如 `.VPSidebar .VPSidebarItem.level-1:hover + .VPSidebarItem.level-1`），
+   * 不这么做就得把它们逐条复制一遍。
+   */
+  .VPSidebar .VPSidebarItem.level-1,
+  .VPDocAsideOutline .VPDocOutlineItem > li {
+    transform: none !important;
   }
 }
